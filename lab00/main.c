@@ -86,8 +86,8 @@ int main () {
 	int **matB;
 	int **resultado;
 
-	matrizA = fopen("/home/rebecca/Documentos/Unicamp/MC202/Laboratórios/lab00/matrizA.txt", "r");
-	matrizB = fopen("/home/rebecca/Documentos/Unicamp/MC202/Laboratórios/lab00/matrizB.txt", "r");
+	matrizA = fopen("matrizA.txt", "r");
+	matrizB = fopen("matrizB.txt", "r");
 
 	if ((matrizA != NULL) && (matrizB != NULL)) {
 
@@ -95,7 +95,7 @@ int main () {
 		fscanf(matrizB, "%d %d", &linhasB, &colunasB);
 
 		if (colunasA != linhasB) {
-			printf("As matrizes nao seguem as propriedades necessarias para realizar a multiplicacao.");
+			printf("As matrizes nao seguem as propriedades necessarias para realizar a multiplicacao.");
 		}
 		else {
 			matA = alocarMatriz(linhasA, colunasA);
