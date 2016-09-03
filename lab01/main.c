@@ -1,26 +1,19 @@
 #include <stdio.h>
-//#include <stdlib.h>
 #include "lista.h"
 
 int main () {
 	No *lista;
-	int m, n, p;
+	int elemento, m, n, p;
 
 	criar(&lista);
 
-
+	while (scanf("%d", &elemento) == 1) {
+		insere(&lista, elemento);
+		if (getchar() == '\n')
+			break;
+	}
 
 	scanf(" %d %d %d", &m, &n, &p);
-
-
-	criar(&lista);
-	insere(&lista, 5);
-	insere(&lista, 6);
-	insere(&lista, 7);
-	insere(&lista, 8);
-	insere(&lista, 9);
-
-	escreve(&lista);
 
 	destruir(&lista);
 
