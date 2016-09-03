@@ -103,10 +103,6 @@ void subdivideLista(No *lista, int m, int n, int p) {
 	No *mP = procura(&lista, m);
 	No *nP = procura(&lista, n);
 	No *pP = procura(&lista, p);
-	No *nS = procura(&mP, n);
-	No *pS = procura(&lista, p);
-	No *pT = procura(&nS, p);
-	No *last = ultimo(&lista);
 
 	if (mP == NULL) {
 		mP = lista;
@@ -119,6 +115,9 @@ void subdivideLista(No *lista, int m, int n, int p) {
 		nP = pP;
 	}
 
+	No *nS = procura(&mP, n);
+	No *pS = procura(&lista, p);
+
 	if (nS == NULL) {
 		nS = mP;
 	}
@@ -126,6 +125,9 @@ void subdivideLista(No *lista, int m, int n, int p) {
 	if (pS == NULL) {
 		pS = ultimo(&lista);
 	}
+
+	No *pT = procura(&nS, p);
+	No *last = ultimo(&lista);
 
 	if (pT == NULL) {
 		pT= nS;
