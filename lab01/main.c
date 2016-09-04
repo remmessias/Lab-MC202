@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define ORIGINAL "original"
+#define PRIMEIRA "primeira"
+#define SEGUNDA "segunda"
+#define TERCEIRA "terceira"
+
 //////////////////////////////////////////////////////
 //                                                  //
 //                                                  //
@@ -108,37 +113,29 @@ void destruir (No **lista) {
 //////////////////////////////////////////////////////
 
 
+void imprimeSublista(char lista[9], No *inicio, No *fim) {
+	printf("%s ", lista);
+	while (inicio->numero != fim->numero) {
+		printf("%d ", inicio->numero);
+		inicio = inicio->prox;
+	}
+	printf("%d\n", fim->numero);
+}
+
 /*
  * Função que escreve a saída na tela para o usuário.
  */
 void imprime(No *lista, int m, int n, int p, No *mP, No *nP, No *nS, No *pS, No *pT, No *last) {
-	printf("original ");
+	printf("%s ", ORIGINAL);
 	escreve(&lista);
 	printf("m=%d, n=%d, p=%d\n", m, n, p);
 
 	//imprime primeira parte
-	printf("primeira ");
-	while (mP->numero != nP->numero) {
-		printf("%d ", mP->numero);
-		mP = mP->prox;
-	}
-	printf("%d\n", nP->numero);
-
+	imprimeSublista(PRIMEIRA, mP, nP);
 	//imprime segunda parte
-	printf("segunda ");
-	while (nS->numero != pS->numero) {
-		printf("%d ", nS->numero);
-		nS = nS->prox;
-	}
-	printf("%d\n", nS->numero);
-
+	imprimeSublista(SEGUNDA, nS, pS);
 	//imprime terceira parte
-	printf("terceira ");
-	while (pT->numero != last->numero) {
-		printf("%d ", pT->numero);
-		pT = pT->prox;
-	}
-	printf("%d\n", pT->numero);
+	imprimeSublista(TERCEIRA, pT, last);
 }
 
 /*
@@ -151,10 +148,12 @@ void subdivideLista(No *lista, int m, int n, int p) {
 	No *nP = procura(&lista, n);
 	No *pP = procura(&lista, p);
 
+	//se não houver um m para início da primeira lista
 	if (mP == NULL) {
 		mP = lista;
 	}
 
+	//se não houver um n para fim da primeira lista
 	if (nP == NULL) {
 		if (pP == NULL) {
 			pP = ultimo(&lista);
@@ -165,10 +164,12 @@ void subdivideLista(No *lista, int m, int n, int p) {
 	No *nS = procura(&mP, n);
 	No *pS = procura(&lista, p);
 
+	//se não houver um n para início da segunda lista
 	if (nS == NULL) {
 		nS = mP;
 	}
 
+	//se não houver um p para fim da segunda lista
 	if (pS == NULL) {
 		pS = ultimo(&lista);
 	}
@@ -176,6 +177,7 @@ void subdivideLista(No *lista, int m, int n, int p) {
 	No *pT = procura(&nS, p);
 	No *last = ultimo(&lista);
 
+	//se não houver um p para início da terceira lista
 	if (pT == NULL) {
 		pT= nS;
 	}
