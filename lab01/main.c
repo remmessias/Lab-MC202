@@ -208,8 +208,6 @@ int main () {
 
 	leLista(&lista);
 
-	escreve(&lista);
-
 	scanf(" %d %d %d", &m, &n, &p);
 
 	subdivideLista(lista, m, n, p);
