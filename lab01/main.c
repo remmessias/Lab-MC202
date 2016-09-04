@@ -1,15 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+//////////////////////////////////////////////////////
+//                                                  //
+//                                                  //
+//          Funções e definição de lista.           //
+//      Todas as funções operam sobre uma lista     //
+//                                                  //
+//                                                  //
+//////////////////////////////////////////////////////
+
+// Definição de um nó (elemento da lista)
 typedef struct No {
 	int numero;
 	struct No *prox;
 } No;
 
+/*
+ * Função que cria uma lista.
+ */
 void criar (No **lista) {
 	*lista = NULL;
 }
 
+/*
+ * Função que insere um novo elemento no final da lista.
+ */
 void insere (No **lista, int numero) {
 	No *novo, *atual = *lista;
 	novo = malloc(sizeof(No));
@@ -28,16 +45,9 @@ void insere (No **lista, int numero) {
 	}
 }
 
-void destruir (No **lista) {
-	No *atual, *proximo;
-	proximo = *lista;
-	while (proximo != NULL) {
-		atual = proximo;
-		proximo = atual->prox;
-		free(atual);
-	}
-}
-
+/*
+ * Função que procura na lista um nó com um determinado número.
+ */
 No *procura (No **lista, int numero) {
 	No *atual = *lista;
 
@@ -49,6 +59,9 @@ No *procura (No **lista, int numero) {
 	return NULL;
 }
 
+/*
+ * Função que escreve uma lista ou uma sublista na tela.
+ */
 void escreve (No **lista) {
 	No *atual = *lista;
 
@@ -59,6 +72,9 @@ void escreve (No **lista) {
 	printf("%d\n", atual->numero);
 }
 
+/*
+ * Função que procura o último nó da lista.
+ */
 No *ultimo (No **lista) {
 	No *atual = *lista;
 
@@ -69,6 +85,32 @@ No *ultimo (No **lista) {
 	return atual;
 }
 
+/*
+ * Função que destrói a lista após ser utilizada.
+ */
+void destruir (No **lista) {
+	No *atual, *proximo;
+	proximo = *lista;
+	while (proximo != NULL) {
+		atual = proximo;
+		proximo = atual->prox;
+		free(atual);
+	}
+}
+
+//////////////////////////////////////////////////////
+//                                                  //
+//                                                  //
+//      Funções auxiliares que são utilizadas       //
+//      pelo programa.                              //
+//                                                  //
+//                                                  //
+//////////////////////////////////////////////////////
+
+
+/*
+ * Função que escreve a saída na tela para o usuário.
+ */
 void imprime(No *lista, int m, int n, int p, No *mP, No *nP, No *nS, No *pS, No *pT, No *last) {
 	printf("original ");
 	escreve(&lista);
@@ -99,6 +141,11 @@ void imprime(No *lista, int m, int n, int p, No *mP, No *nP, No *nS, No *pS, No 
 	printf("%d\n", pT->numero);
 }
 
+/*
+ * Função que consulta em quais nós cada subdivisão deve
+ * começar e acabar. Além disso cham a função de impressão
+ * para mostrar ao usuário a saida esperada.
+ */
 void subdivideLista(No *lista, int m, int n, int p) {
 	No *mP = procura(&lista, m);
 	No *nP = procura(&lista, n);
@@ -135,18 +182,33 @@ void subdivideLista(No *lista, int m, int n, int p) {
 
 	imprime(lista, m, n, p, mP, nP, nS, pS, pT, last);
 }
+/*
+ * Função que lê os elemento da lista e os insere nela.
+ */
+void leLista(No **lista) {
+	char s[1000];
+	char *token;
+	int elemento = -1;
+
+	scanf("%[^\n]s", s);
+
+	token = strtok(s, " ");
+	while (token != NULL) {
+		sscanf(token, "%d", &elemento);
+		insere(lista, elemento);
+		token = strtok(NULL, " ");
+	}
+}
 
 int main () {
 	No *lista;
-	int elemento, m, n, p;
+	int m, n, p;
 
 	criar(&lista);
 
-	while (scanf("%d", &elemento) == 1) {
-		insere(&lista, elemento);
-		if (getchar() == '\n')
-			break;
-	}
+	leLista(&lista);
+
+	escreve(&lista);
 
 	scanf(" %d %d %d", &m, &n, &p);
 
