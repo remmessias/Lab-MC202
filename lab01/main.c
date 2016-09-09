@@ -112,7 +112,9 @@ void destruir (No **lista) {
 //                                                  //
 //////////////////////////////////////////////////////
 
-
+/*
+ * Função que escreve uma sublista dado seu inicio e seu fim
+ */
 void imprimeSublista(char lista[9], No *inicio, No *fim) {
 	printf("%s ", lista);
 	while (inicio->numero != fim->numero) {
@@ -125,67 +127,67 @@ void imprimeSublista(char lista[9], No *inicio, No *fim) {
 /*
  * Função que escreve a saída na tela para o usuário.
  */
-void imprime(No *lista, int m, int n, int p, No *mP, No *nP, No *nS, No *pS, No *pT, No *last) {
+void imprime(No *lista, int inicio, int meio, int fim, No *inicioPrimeiro, No *fimPrimeiro, No *inicioSegundo, No *fimSegundo, No *inicioTerceio, No *fimTerceiro) {
 	printf("%s ", ORIGINAL);
 	escreve(&lista);
-	printf("m=%d, n=%d, p=%d\n", m, n, p);
+	printf("m=%d, n=%d, p=%d\n", inicio, meio, fim);
 
 	//imprime primeira parte
-	imprimeSublista(PRIMEIRA, mP, nP);
+	imprimeSublista(PRIMEIRA, inicioPrimeiro, fimPrimeiro);
 	//imprime segunda parte
-	imprimeSublista(SEGUNDA, nS, pS);
+	imprimeSublista(SEGUNDA, inicioSegundo, fimSegundo);
 	//imprime terceira parte
-	imprimeSublista(TERCEIRA, pT, last);
+	imprimeSublista(TERCEIRA, inicioTerceio, fimTerceiro);
 }
 
 /*
  * Função que consulta em quais nós cada subdivisão deve
- * começar e acabar. Além disso cham a função de impressão
+ * começar e acabar. Além disso chama a função de impressão
  * para mostrar ao usuário a saida esperada.
  */
-void subdivideLista(No *lista, int m, int n, int p) {
-	No *mP = procura(&lista, m);
-	No *nP = procura(&lista, n);
-	No *pP = procura(&lista, p);
+void subdivideLista(No *lista, int inicio, int meio, int fim) {
+	No *inicioPrimeiro = procura(&lista, inicio);
+	No *meioPrimeiro = procura(&lista, meio);
+	No *fimPrimeiro = procura(&lista, fim);
 
 	//se não houver um m para início da primeira lista
-	if (mP == NULL) {
-		mP = lista;
+	if (inicioPrimeiro == NULL) {
+		inicioPrimeiro = lista;
 	}
 
 	//se não houver um n para fim da primeira lista
-	if (nP == NULL) {
-		if (pP == NULL) {
-			pP = ultimo(&lista);
+	if (meioPrimeiro == NULL) {
+		if (fimPrimeiro == NULL) {
+			fimPrimeiro = ultimo(&lista);
 		}
-		nP = pP;
+		meioPrimeiro = fimPrimeiro;
 	}
 
-	No *nS = procura(&mP, n);
-	No *pS = procura(&lista, p);
+	No *inicioSegundo = procura(&inicioPrimeiro, meio);
+	No *fimSegundo = procura(&lista, fim);
 
 	//se não houver um n para início da segunda lista
-	if (nS == NULL) {
-		nS = mP;
+	if (inicioSegundo == NULL) {
+		inicioSegundo = inicioPrimeiro;
 	}
 
 	//se não houver um p para fim da segunda lista
-	if (pS == NULL) {
-		pS = ultimo(&lista);
+	if (fimSegundo == NULL) {
+		fimSegundo = ultimo(&lista);
 	}
 
-	No *pT = procura(&nS, p);
-	No *last = ultimo(&lista);
+	No *inicioTerceiro = procura(&inicioSegundo, fim);
+	No *ultimoElemento = ultimo(&lista);
 
 	//se não houver um p para início da terceira lista
-	if (pT == NULL) {
-		pT= nS;
+	if (inicioTerceiro == NULL) {
+		inicioTerceiro = inicioSegundo;
 	}
 
-	imprime(lista, m, n, p, mP, nP, nS, pS, pT, last);
+	imprime(lista, inicio, meio, fim, inicioPrimeiro, meioPrimeiro, inicioSegundo, fimSegundo, inicioTerceiro, ultimoElemento);
 }
 /*
- * Função que lê os elemento da lista e os insere nela.
+ * Função que lê os elementos da lista e os insere nela.
  */
 void leLista(No **lista) {
 	char s[1000];
@@ -204,15 +206,15 @@ void leLista(No **lista) {
 
 int main () {
 	No *lista;
-	int m, n, p;
+	int inicio, meio, fim;
 
 	criar(&lista);
 
 	leLista(&lista);
 
-	scanf(" %d %d %d", &m, &n, &p);
+	scanf(" %d %d %d", &inicio, &meio, &fim);
 
-	subdivideLista(lista, m, n, p);
+	subdivideLista(lista, inicio, meio, fim);
 
 	destruir(&lista);
 
