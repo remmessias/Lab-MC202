@@ -122,7 +122,9 @@ void colocaComeco(No **lista, No *no) {
 int acessaMTF(No **lista, int chave) {
 	int custo = 0;
 	No *atual;
-	for (atual = *lista; atual->chave != chave; atual = atual->proximo) {
+	for (atual = *lista; atual != NULL; atual = atual->proximo) {
+		if (atual->chave == chave)
+			break;
 		custo++;
 	}
 	custo++;
@@ -141,7 +143,9 @@ int acessaMTF(No **lista, int chave) {
 int acessaTR(No **lista, int chave) {
 	int custo = 0;
 	No *atual;
-	for (atual = *lista; atual->chave != chave; atual = atual->proximo) {
+	for (atual = *lista; atual != NULL; atual = atual->proximo) {
+		if (atual->chave == chave)
+			break;
 		custo++;
 	}
 	custo++;
@@ -202,14 +206,28 @@ int removeMTF(No **lista, int chave) {
 	No *atual = *lista;
 	int custo = 0;
 
-	while (atual->chave != chave) {
+	while (atual != NULL) {
+		if (atual->chave == chave) {
+			if (atual->anterior == NULL) {
+				atual->proximo->anterior = NULL;
+				(*lista) = atual->proximo;
+				free(atual);
+			}
+			else if (atual->proximo == NULL) {
+				atual->anterior->proximo = NULL;
+				free(atual);
+			}
+			else {
+				atual->proximo->anterior = atual->anterior;
+				atual->anterior->proximo = atual->proximo;
+				free(atual);
+			}
+			break;
+		}
 		custo++;
 		atual = atual->proximo;
 	}
 	custo++;
-	atual->proximo->anterior = atual->anterior;
-	atual->anterior->proximo = atual->proximo;
-	free(atual);
 
 	return custo;
 }
@@ -220,27 +238,28 @@ int removeMTF(No **lista, int chave) {
 int removeTR(No **lista, int chave) {
 	No *atual = *lista;
 	int custo = 0;
-	while (atual->chave != chave) {
+	while (atual != NULL) {
+		if (atual->chave == chave) {
+			if (atual->anterior == NULL) {
+				atual->proximo->anterior = NULL;
+				(*lista) = atual->proximo;
+				free(atual);
+			}
+			else if (atual->proximo == NULL) {
+				atual->anterior->proximo = NULL;
+				free(atual);
+			}
+			else {
+				atual->proximo->anterior = atual->anterior;
+				atual->anterior->proximo = atual->proximo;
+				free(atual);
+			}
+			break;
+		}
 		custo++;
 		atual = atual->proximo;
 	}
 	custo++;
-	if (atual->anterior == NULL) {
-		atual->proximo->anterior = NULL;
-		(*lista) = atual->proximo;
-		free(atual);
-	}
-	else if (atual->proximo == NULL) {
-		atual->anterior->proximo = NULL;
-		free(atual);
-	}
-	else {
-		atual->proximo->anterior = atual->anterior;
-		atual->anterior->proximo = atual->proximo;
-		free(atual);
-	}
-
-
 	return custo;
 }
 
