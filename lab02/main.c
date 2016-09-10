@@ -18,7 +18,7 @@
 typedef struct No {
 	int chave;
 	struct No *proximo;
-		struct No *anterior;
+	struct No *anterior;
 } No;
 
 /*
@@ -71,29 +71,32 @@ void inverte(No **lista, No *no) {
 	No *proximo = no->proximo;
 	No *anterior = no->anterior;
 
-	if (proximo == NULL) {
-		anterior->anterior->proximo = no;
-		no->anterior = anterior->anterior;
-		no->proximo = anterior;
-		anterior->anterior = no;
-		anterior->proximo = proximo;
+	if (!(proximo == NULL && anterior == NULL)) {
+		if (proximo == NULL && anterior->anterior != NULL) {
+			anterior->anterior->proximo = no;
+			no->anterior = anterior->anterior;
+			no->proximo = anterior;
+			anterior->anterior = no;
+			anterior->proximo = proximo;
+		}
+		else if (anterior->anterior == NULL) {
+			no->anterior = NULL;
+			no->proximo = anterior;
+			anterior->anterior = no;
+			anterior->proximo = proximo;
+			proximo->anterior = anterior;
+			(*lista) = no;
+		}
+		else {
+			anterior->anterior->proximo = no;
+			no->anterior = anterior->anterior;
+			no->proximo = anterior;
+			anterior->anterior = no;
+			anterior->proximo = proximo;
+			proximo->anterior = anterior;
+		}
 	}
-	else if (anterior->anterior == NULL) {
-		no->anterior = NULL;
-		no->proximo = anterior;
-		anterior->anterior = no;
-		anterior->proximo = proximo;
-		proximo->anterior = anterior;
-		(*lista) = no;
-	}
-	else {
-		anterior->anterior->proximo = no;
-		no->anterior = anterior->anterior;
-		no->proximo = anterior;
-		anterior->anterior = no;
-		anterior->proximo = proximo;
-		proximo->anterior = anterior;
-	}
+
 }
 
 /*
@@ -323,37 +326,35 @@ void escreveSaida(No **listaMTF, No **listaTR, int custoMTF, int custoTR) {
 		escreve(listaTR);
 }
 
-void leInstrucoes(No **listaMTF, No **listaTR, int requisicoes) {
-	int custoMTF = 0, custoTR = 0, chave, i;
+void leEOperaInstrucoes(No **listaMTF, No **listaTR, int requisicoes, int *custoMTF, int *custoTR) {
+	int chave, i;
 	char acao;
 
 	for (i = 0; i < requisicoes; i++) {
 		scanf(" %c %d", &acao, &chave);
 		switch (acao) {
 			case ACESSAR:
-				custoMTF += acessaMTF(listaMTF, chave);
-				custoTR += acessaTR(listaTR, chave);
+				*(custoMTF) += acessaMTF(listaMTF, chave);
+				*(custoTR) += acessaTR(listaTR, chave);
 				break;
 			case INSERIR:
-				custoMTF += insereMTF(listaMTF, chave);
-				custoTR += insereTR(listaTR, chave);
+				*(custoMTF) += insereMTF(listaMTF, chave);
+				*(custoTR) += insereTR(listaTR, chave);
 				break;
 			case REMOVER:
-				custoMTF += removeMTF(listaMTF, chave);
-				custoTR += removeTR(listaTR, chave);
+				*(custoMTF)+= removeMTF(listaMTF, chave);
+				*(custoTR) += removeTR(listaTR, chave);
 				break;
 			default:
 				break;
 		}
 	}
-
-	escreveSaida(listaMTF, listaTR, custoMTF, custoTR);
 }
 
 int main() {
 	No *listaMTF;
 	No *listaTR;
-	int tamanhoInicial, numRequisicoes;
+	int tamanhoInicial, numRequisicoes, custoMTF = 0, custoTR = 0;
 
 	criar(&listaMTF);
 	criar(&listaTR);
@@ -362,7 +363,9 @@ int main() {
 
 	leLista(&listaMTF, &listaTR, tamanhoInicial);
 
-	leInstrucoes(&listaMTF, &listaTR, numRequisicoes);
+	leEOperaInstrucoes(&listaMTF, &listaTR, numRequisicoes, &custoMTF, &custoTR);
+
+	escreveSaida(&listaMTF, &listaTR, custoMTF, custoTR);
 
 	destruir(&listaMTF);
 	destruir(&listaTR);
