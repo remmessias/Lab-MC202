@@ -208,7 +208,11 @@ int removeMTF(No **lista, int chave) {
 
 	while (atual != NULL) {
 		if (atual->chave == chave) {
-			if (atual->anterior == NULL) {
+			if (atual->anterior == NULL && atual->proximo == NULL) {
+				free(atual);
+				(*lista) = NULL;
+			}
+			else if (atual->anterior == NULL) {
 				atual->proximo->anterior = NULL;
 				(*lista) = atual->proximo;
 				free(atual);
@@ -240,7 +244,11 @@ int removeTR(No **lista, int chave) {
 	int custo = 0;
 	while (atual != NULL) {
 		if (atual->chave == chave) {
-			if (atual->anterior == NULL) {
+			if (atual->anterior == NULL && atual->proximo == NULL) {
+				free(atual);
+				(*lista) = NULL;
+			}
+			else if (atual->anterior == NULL) {
 				atual->proximo->anterior = NULL;
 				(*lista) = atual->proximo;
 				free(atual);
