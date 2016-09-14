@@ -84,7 +84,8 @@ void inverte(No **lista, No *no) {
 			no->proximo = anterior;
 			anterior->anterior = no;
 			anterior->proximo = proximo;
-			proximo->anterior = anterior;
+			if (proximo != NULL)
+				proximo->anterior = anterior;
 			(*lista) = no;
 		}
 		else {
@@ -203,9 +204,9 @@ int insereTR(No **lista, int chave) {
 }
 
 /*
- * Função que remove uma chave em uma lista do jeito MTF
+ * Função que remove uma chave em uma lista do jeito MTF e do jeito TR
  */
-int removeMTF(No **lista, int chave) {
+int remover (No **lista, int chave) {
 	No *atual = *lista;
 	int custo = 0;
 
@@ -236,41 +237,6 @@ int removeMTF(No **lista, int chave) {
 	}
 	custo++;
 
-	return custo;
-}
-
-/*
- * Função que remove uma chave em uma lista do jeito TR
- */
-int removeTR(No **lista, int chave) {
-	No *atual = *lista;
-	int custo = 0;
-	while (atual != NULL) {
-		if (atual->chave == chave) {
-			if (atual->anterior == NULL && atual->proximo == NULL) {
-				free(atual);
-				(*lista) = NULL;
-			}
-			else if (atual->anterior == NULL) {
-				atual->proximo->anterior = NULL;
-				(*lista) = atual->proximo;
-				free(atual);
-			}
-			else if (atual->proximo == NULL) {
-				atual->anterior->proximo = NULL;
-				free(atual);
-			}
-			else {
-				atual->proximo->anterior = atual->anterior;
-				atual->anterior->proximo = atual->proximo;
-				free(atual);
-			}
-			break;
-		}
-		custo++;
-		atual = atual->proximo;
-	}
-	custo++;
 	return custo;
 }
 
@@ -326,6 +292,9 @@ void escreveSaida(No **listaMTF, No **listaTR, int custoMTF, int custoTR) {
 		escreve(listaTR);
 }
 
+/*
+ * Função que lê as operações e as executa.
+ */
 void leEOperaInstrucoes(No **listaMTF, No **listaTR, int requisicoes, int *custoMTF, int *custoTR) {
 	int chave, i;
 	char acao;
@@ -342,8 +311,8 @@ void leEOperaInstrucoes(No **listaMTF, No **listaTR, int requisicoes, int *custo
 				*(custoTR) += insereTR(listaTR, chave);
 				break;
 			case REMOVER:
-				*(custoMTF)+= removeMTF(listaMTF, chave);
-				*(custoTR) += removeTR(listaTR, chave);
+				*(custoMTF)+= remover(listaMTF, chave);
+				*(custoTR) += remover(listaTR, chave);
 				break;
 			default:
 				break;
