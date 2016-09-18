@@ -1,3 +1,1 @@
-sequencia valida pode ser colorida
-12: azul
-43: azul
+sequencia invalida ou nao pode colorir

@@ -47,26 +47,6 @@ void empilha(NoPilha **pilha, Informacoes info) {
 }
 
 /*
- * Função que desempilha um nó
- */
-Informacoes desempilha(NoPilha **pilha) {
-	NoPilha *q = *pilha;
-
-	if (q != NULL) {
-		Informacoes info = q->info;
-		*pilha = q->prox;
-		free(q);
-		return info;
-	}
-	Informacoes retorno;
-	retorno.cor = 'c';
-	retorno.brinquedo = 0;
-	retorno.antecessor = 0;
-
-	return retorno;
-}
-
-/*
  * Função que retorna o nó do topo da pilha
  */
 int getTopo(NoPilha **p) {
@@ -113,6 +93,26 @@ NoPilha *ordena(NoPilha *pilha) {
 }
 
 /*
+ * Função que desempilha um nó
+ */
+Informacoes desempilha(NoPilha **pilha) {
+	NoPilha *q = *pilha;
+
+	if (q != NULL) {
+		Informacoes info = q->info;
+		*pilha = q->prox;
+		free(q);
+		return info;
+	}
+	Informacoes retorno;
+	retorno.cor = 'c';
+	retorno.brinquedo = 0;
+	retorno.antecessor = 0;
+
+	return retorno;
+}
+
+/*
  * Função que destroi a pilha
  */
 void destroi(NoPilha **p) {
@@ -131,8 +131,8 @@ void destroi(NoPilha **p) {
  */
 int verificarCor(NoPilha **lista, char cor, int elemento) {
 	for (NoPilha *aux = *lista; aux != NULL; aux = aux->prox) {
-		if (aux->info.brinquedo == elemento || aux->info.cor != cor)
-			return 0;
+		if (aux->info.brinquedo == -elemento && aux->info.cor != cor)
+				return 0;
 	}
 	return 1;
 }
@@ -168,21 +168,18 @@ void incrementaQtdAzulTopo(NoPilha **pilha) {
 }
 
 /*
- * Função que verifica se a lista já possui um determinado brinquedo
- * com o mesmo número
+ * Função que verifica se a lista já possui um determinado brinquedo com o mesmo número
  */
 int temBrinquedo(NoPilha **pilha, int elemento) {
 	for (NoPilha *aux = *pilha; aux != NULL; aux = aux->prox) {
 		if (aux->info.brinquedo == elemento)
 			return 1;
 	}
-
 	return 0;
 }
 
 /*
- * Função que imprime a sequancia de cores de cada
- * brinquedo para o usuario
+ * Função que imprime a sequancia de cores de cada brinquedo para o usuario
  */
 void escreveResultado(NoPilha **pilha) {
 	printf("sequencia valida pode ser colorida\n");
