@@ -32,27 +32,27 @@ typedef struct NoPilha {
 /*
  * Função que cria uma pilha
  */
-void criar(NoPilha **p) {
-	*p = NULL;
+void criar(NoPilha **pilha) {
+	*pilha = NULL;
 }
 
 /*
  * Função que empilha um nó
  */
 void empilha(NoPilha **pilha, Informacoes info) {
-	NoPilha *q = malloc(sizeof(NoPilha));
-	q->info = info;
-	q->prox = *pilha;
-	*pilha = q;
+	NoPilha *aux = malloc(sizeof(NoPilha));
+	aux->info = info;
+	aux->prox = *pilha;
+	*pilha = aux;
 }
 
 /*
  * Função que retorna o nó do topo da pilha
  */
-int getTopo(NoPilha **p) {
-	if (*p == NULL)
+int getTopo(NoPilha **pilha) {
+	if (*pilha == NULL)
 		return 0;
-	return (*p)->info.brinquedo;
+	return (*pilha)->info.brinquedo;
 }
 
 /*
@@ -67,7 +67,7 @@ int estaVazia(NoPilha **pilha) {
 /*
  * Função que troca dois nós de uma lista
  */
-NoPilha *troca(NoPilha *no1, NoPilha *no2) {
+NoPilha *trocaNo(NoPilha *no1, NoPilha *no2) {
 	no1->prox = no2->prox;
 	no2->prox = no1;
 	return no2;
@@ -80,12 +80,12 @@ NoPilha *ordena(NoPilha *pilha) {
 	if (pilha == NULL) return NULL;
 
 	if (pilha->prox != NULL && pilha->info.brinquedo < pilha->prox->info.brinquedo)
-		pilha = troca(pilha, pilha->prox);
+		pilha = trocaNo(pilha, pilha->prox);
 
 	pilha->prox = ordena(pilha->prox);
 
 	if (pilha->prox != NULL && pilha->info.brinquedo < pilha->prox->info.brinquedo) {
-		pilha = troca(pilha, pilha->prox);
+		pilha = trocaNo(pilha, pilha->prox);
 		pilha->prox = ordena(pilha->prox);
 	}
 
@@ -96,12 +96,12 @@ NoPilha *ordena(NoPilha *pilha) {
  * Função que desempilha um nó
  */
 Informacoes desempilha(NoPilha **pilha) {
-	NoPilha *q = *pilha;
+	NoPilha *aux = *pilha;
 
-	if (q != NULL) {
-		Informacoes info = q->info;
-		*pilha = q->prox;
-		free(q);
+	if (aux != NULL) {
+		Informacoes info = aux->info;
+		*pilha = aux->prox;
+		free(aux);
 		return info;
 	}
 	Informacoes retorno;
@@ -115,12 +115,12 @@ Informacoes desempilha(NoPilha **pilha) {
 /*
  * Função que destroi a pilha
  */
-void destroi(NoPilha **p) {
+void destroi(NoPilha **pilha) {
 	NoPilha *prox;
 
-	for (NoPilha *q = *p; q != NULL; q = prox) {
-		prox = q->prox;
-		free(q);
+	for (NoPilha *aux = *pilha; aux != NULL; aux = prox) {
+		prox = aux->prox;
+		free(aux);
 	}
 }
 
@@ -158,8 +158,7 @@ void empilhaInformacao(int elemento, NoPilha **pilhaBrinquedo) {
 }
 
 /*
- * Função que incrementa a quantidade de brinquedos azuis
- * elemento no topo da lista
+ * Função que incrementa a quantidade de brinquedos azuis elemento no topo da lista
  */
 void incrementaQtdAzulTopo(NoPilha **pilha) {
 	if ((*pilha) != NULL) {
