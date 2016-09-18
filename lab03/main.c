@@ -5,8 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define VERMELHO 'v'
-#define AZUL 'a'
+#define SIMBVERMELHO 'v'
+#define SIMBAZUL 'a'
+#define AZUL "azul"
+#define VERMELHO "vermelho"
 #define SAIDA "sequencia invalida ou nao pode colorir\n"
 
 //////////////////////////////////////////////////////////////
@@ -17,7 +19,7 @@
 
 // Struct que contém as informações do nó
 typedef struct {
-	int brinquedo, antecessor;
+	int brinquedo, antecessor, qtdAzul;
 	char cor;
 } Informacoes;
 
@@ -37,22 +39,22 @@ void criar(NoPilha **p) {
 /*
  * Função que empilha um nó
  */
-void empilha(NoPilha **p, Informacoes info) {
+void empilha(NoPilha **pilha, Informacoes info) {
 	NoPilha *q = malloc(sizeof(NoPilha));
 	q->info = info;
-	q->prox = *p;
-	*p = q;
+	q->prox = *pilha;
+	*pilha = q;
 }
 
 /*
  * Função que desempilha um nó
  */
-Informacoes desempilha(NoPilha **p) {
-	NoPilha *q = *p;
+Informacoes desempilha(NoPilha **pilha) {
+	NoPilha *q = *pilha;
 
 	if (q != NULL) {
 		Informacoes info = q->info;
-		*p = q->prox;
+		*pilha = q->prox;
 		free(q);
 		return info;
 	}
@@ -83,6 +85,34 @@ int estaVazia(NoPilha **pilha) {
 }
 
 /*
+ * Função que troca dois nós de uma lista
+ */
+NoPilha *troca(NoPilha *no1, NoPilha *no2) {
+	no1->prox = no2->prox;
+	no2->prox = no1;
+	return no2;
+}
+
+/*
+ * Função que ordena uma lista recursivamente
+ */
+NoPilha *ordena(NoPilha *pilha) {
+	if (pilha == NULL) return NULL;
+
+	if (pilha->prox != NULL && pilha->info.brinquedo < pilha->prox->info.brinquedo)
+		pilha = troca(pilha, pilha->prox);
+
+	pilha->prox = ordena(pilha->prox);
+
+	if (pilha->prox != NULL && pilha->info.brinquedo < pilha->prox->info.brinquedo) {
+		pilha = troca(pilha, pilha->prox);
+		pilha->prox = ordena(pilha->prox);
+	}
+
+	return pilha;
+}
+
+/*
  * Função que destroi a pilha
  */
 void destroi(NoPilha **p) {
@@ -97,30 +127,11 @@ void destroi(NoPilha **p) {
 // FIM DA DEFINIÇÃO E OPERAÇÕES COM A PILHA
 
 /*
- * Função que verifica quantos brinquedos tem dentro de uma boneca
- */
-int quantosAzuis(NoPilha **p, int dado) {
-	int qtdAzuis = 0;
-	NoPilha *pilha = *p;
-
-	if (pilha == NULL)
-		return 0;
-
-	for (; pilha != NULL; pilha = pilha->prox) {
-		if (pilha->info.antecessor == -dado && pilha->info.cor == AZUL) {
-			qtdAzuis++;
-		}
-	}
-
-	return qtdAzuis;
-}
-
-/*
  * Função que verifica se brinquedos com o mesmo número possuem mesma cor
  */
 int verificarCor(NoPilha **lista, char cor, int elemento) {
 	for (NoPilha *aux = *lista; aux != NULL; aux = aux->prox) {
-		if (aux->info.brinquedo == elemento && aux->info.cor != cor)
+		if (aux->info.brinquedo == elemento || aux->info.cor != cor)
 			return 0;
 	}
 	return 1;
@@ -140,16 +151,56 @@ int absoluto(int numero) {
  */
 void empilhaInformacao(int elemento, NoPilha **pilhaBrinquedo) {
 	Informacoes informacao;
+	informacao.qtdAzul = 0;
 	informacao.brinquedo = elemento;
 	informacao.antecessor = getTopo(pilhaBrinquedo);
 	empilha(pilhaBrinquedo, informacao);
 }
 
 /*
- * Função que seta cor
+ * Função que incrementa a quantidade de brinquedos azuis
+ * elemento no topo da lista
  */
-void leEColacaCor(NoPilha **pilhaBrinquedo, NoPilha **cores, int tamanho) {
-	int elemento, qtdAzul, i;
+void incrementaQtdAzulTopo(NoPilha **pilha) {
+	if ((*pilha) != NULL) {
+		(*pilha)->info.qtdAzul++;
+	}
+}
+
+/*
+ * Função que verifica se a lista já possui um determinado brinquedo
+ * com o mesmo número
+ */
+int temBrinquedo(NoPilha **pilha, int elemento) {
+	for (NoPilha *aux = *pilha; aux != NULL; aux = aux->prox) {
+		if (aux->info.brinquedo == elemento)
+			return 1;
+	}
+
+	return 0;
+}
+
+/*
+ * Função que imprime a sequancia de cores de cada
+ * brinquedo para o usuario
+ */
+void escreveResultado(NoPilha **pilha) {
+	printf("sequencia valida pode ser colorida\n");
+
+	for (NoPilha *aux = *pilha; aux != NULL; aux = aux->prox) {
+		if (aux->info.cor == SIMBVERMELHO)
+			printf("%d: %s\n", -aux->info.brinquedo, VERMELHO);
+		else
+			printf("%d: %s\n", -aux->info.brinquedo, AZUL);
+
+	}
+}
+
+/*
+ * Função que lê e coloca a cor em um determinado brinquedo
+ */
+int leEColacaCor(NoPilha **pilhaBrinquedo, NoPilha **cores, int tamanho) {
+	int elemento, i;
 	Informacoes desempilhado;
 
 	for (i = 0; i < tamanho; i++) {
@@ -160,32 +211,33 @@ void leEColacaCor(NoPilha **pilhaBrinquedo, NoPilha **cores, int tamanho) {
 		else {
 			desempilhado = desempilha(pilhaBrinquedo);
 			if (absoluto(desempilhado.brinquedo) == elemento) {
-				qtdAzul = quantosAzuis(cores, elemento);
-
-				if ((qtdAzul + elemento) % 2 == 0) {
-					if (verificarCor(cores, AZUL, elemento)) {
-						desempilhado.cor = AZUL;
-						empilha(cores, desempilhado);
+				if ((desempilhado.qtdAzul + elemento) % 2 == 0) {
+					if (verificarCor(cores, SIMBAZUL, elemento)) {
+						incrementaQtdAzulTopo(pilhaBrinquedo);
+						desempilhado.cor = SIMBAZUL;
+						if (!temBrinquedo(cores, desempilhado.brinquedo))
+							empilha(cores, desempilhado);
 					}
 					else {
 						printf(SAIDA);
-						break;
+						return 0;
 					}
 				}
 				else {
-					if (verificarCor(cores, VERMELHO, elemento)) {
-						desempilhado.cor = VERMELHO;
-						empilha(cores, desempilhado);
+					if (verificarCor(cores, SIMBVERMELHO, elemento)) {
+						desempilhado.cor = SIMBVERMELHO;
+						if (!temBrinquedo(cores, desempilhado.brinquedo))
+							empilha(cores, desempilhado);
 					}
 					else {
 						printf(SAIDA);
-						break;
+						return 0;
 					}
 				}
 			}
 			else {
 				printf(SAIDA);
-				break;
+				return 0;
 			}
 		}
 	}
@@ -193,6 +245,8 @@ void leEColacaCor(NoPilha **pilhaBrinquedo, NoPilha **cores, int tamanho) {
 	if (!estaVazia(pilhaBrinquedo)) {
 		printf(SAIDA);
 	}
+
+	return 1;
 }
 
 int main() {
@@ -204,9 +258,15 @@ int main() {
 	criar(&cores);
 
 	scanf("%d", &tamanho);
-
-	leEColacaCor(&pilhaBrinquedo, &cores, tamanho);
-
+	if (tamanho%2 == 0) {
+		if (leEColacaCor(&pilhaBrinquedo, &cores, tamanho)) {
+			cores = ordena(cores);
+			escreveResultado(&cores);
+		}
+	}
+	else {
+		printf(SAIDA);
+	}
 	destroi(&pilhaBrinquedo);
 	destroi(&cores);
 
