@@ -200,40 +200,46 @@ int leEColacaCor(NoPilha **pilhaBrinquedo, NoPilha **cores, int tamanho) {
 	Informacoes desempilhado;
 
 	for (i = 0; i < tamanho; i++) {
-		scanf(" %d", &elemento);
-		if (elemento < 0) {
-			empilhaInformacao(elemento, pilhaBrinquedo);
+		if ((i != 0 && i < tamanho-1) && (*pilhaBrinquedo) == NULL) {
+			printf(SAIDA);
+			return 0;
 		}
 		else {
-			desempilhado = desempilha(pilhaBrinquedo);
-			if (absoluto(desempilhado.brinquedo) == elemento) {
-				if ((desempilhado.qtdAzul + elemento) % 2 == 0) {
-					if (verificarCor(cores, SIMBAZUL, elemento)) {
-						incrementaQtdAzulTopo(pilhaBrinquedo);
-						desempilhado.cor = SIMBAZUL;
-						if (!temBrinquedo(cores, desempilhado.brinquedo))
-							empilha(cores, desempilhado);
+			scanf(" %d", &elemento);
+			if (elemento < 0) {
+				empilhaInformacao(elemento, pilhaBrinquedo);
+			}
+			else {
+				desempilhado = desempilha(pilhaBrinquedo);
+				if (absoluto(desempilhado.brinquedo) == elemento) {
+					if ((desempilhado.qtdAzul + elemento) % 2 == 0) {
+						if (verificarCor(cores, SIMBAZUL, elemento)) {
+							incrementaQtdAzulTopo(pilhaBrinquedo);
+							desempilhado.cor = SIMBAZUL;
+							if (!temBrinquedo(cores, desempilhado.brinquedo))
+								empilha(cores, desempilhado);
+						}
+						else {
+							printf(SAIDA);
+							return 0;
+						}
 					}
 					else {
-						printf(SAIDA);
-						return 0;
+						if (verificarCor(cores, SIMBVERMELHO, elemento)) {
+							desempilhado.cor = SIMBVERMELHO;
+							if (!temBrinquedo(cores, desempilhado.brinquedo))
+								empilha(cores, desempilhado);
+						}
+						else {
+							printf(SAIDA);
+							return 0;
+						}
 					}
 				}
 				else {
-					if (verificarCor(cores, SIMBVERMELHO, elemento)) {
-						desempilhado.cor = SIMBVERMELHO;
-						if (!temBrinquedo(cores, desempilhado.brinquedo))
-							empilha(cores, desempilhado);
-					}
-					else {
-						printf(SAIDA);
-						return 0;
-					}
+					printf(SAIDA);
+					return 0;
 				}
-			}
-			else {
-				printf(SAIDA);
-				return 0;
 			}
 		}
 	}
