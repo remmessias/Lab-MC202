@@ -2,3 +2,5 @@
 *.res
 *.in
 .idea/
+*.sh~
+main
