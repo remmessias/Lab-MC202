@@ -15,7 +15,7 @@ void criar(Pilha **pilha);
 
 void empilha(Pilha **pilha, Informacoes info);
 
-int getTopo(Pilha **pilha);
+Pilha *getTopo(Pilha **pilha);
 
 int estaVazia(Pilha **pilha);
 

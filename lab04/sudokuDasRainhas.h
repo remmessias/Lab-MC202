@@ -17,7 +17,7 @@ int existeSolucao(char **matriz, int ordem);
 
 void escreveResposta(int existe);
 
-int verifica(int linha, int coluna, char **matriz, Pilha **pilha, int ordem);
+//int verifica(int linha, int coluna, char **matriz, Pilha **pilha, int ordem);
 
 int temDamaNaLinha(Pilha **pilha, int linha);
 

@@ -18,7 +18,7 @@ int main () {
 	else {
 		tabuleiroG = alocarMatriz(ordemTabuleiro);
 		lerMatriz(tabuleiroG, ordemTabuleiro);
-		//escreveMatriz(tabuleiroG, ordemTabuleiro);
+		escreveMatriz(tabuleiroG, ordemTabuleiro);
 		temSolucao = existeSolucao(tabuleiroG, ordemTabuleiro);
 		escreveResposta(temSolucao);
 		liberaMatriz(tabuleiroG, ordemTabuleiro);

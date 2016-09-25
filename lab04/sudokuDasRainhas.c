@@ -54,7 +54,7 @@ void liberaMatriz(char **matriz, int ordem) {
 
 int existeSolucao(char **matriz, int ordem) {
 	Pilha *pilha;
-	int qtdDamas = ordem, i, j;
+	int qtdDamas = ordem, i = 0, j = 0;
 	int empilhou = 0;
 
 	criar(&pilha);
@@ -62,23 +62,37 @@ int existeSolucao(char **matriz, int ordem) {
 	while (qtdDamas > 0) {
 		for (i = 0; i < ordem; i++) {
 			for (j = 0; j < ordem; j++) {
-				if (!verifica(i, j, matriz, &pilha, ordem)) {
-					Informacoes info;
-					info.linha = i;
-					info.coluna = j;
-					info.celula = matriz[i][j];
-					empilha(&pilha, info);
-					empilhou = 1;
-					break;
+				if (!temDamaNaLinha(&pilha, i)) {
+					if (!temDamaNaColuna(&pilha, j)) {
+						if (!temCelula(&pilha, matriz[i][j])) {
+						 	if(!temDamaNasDiagonais(&pilha, i, j, matriz, ordem)) {
+								Informacoes info;
+								info.linha = i;
+								info.coluna = j;
+								info.celula = matriz[i][j];
+								empilha(&pilha, info);
+								empilhou = 1;
+								break;
+							}
+							else {
+								j++;
+								continue;
+							}
+						}
+						else {
+							j++;
+							continue;
+						}
+					}
+					else {
+						j++;
+						continue;
+					}
 				}
-				if (i == ordem-1 && j == ordem-1) {
-					Informacoes topo = desempilha(&pilha);
-
-					if (topo.linha == -1 && topo.coluna == -1 && topo.celula == 'a')
-						return 0;
-					qtdDamas++;
-					i = topo.linha;
-					j = topo.coluna;
+				else {
+					i++;
+					j = -1;
+					continue;
 				}
 			}
 			if (empilhou == 1) {
@@ -89,25 +103,26 @@ int existeSolucao(char **matriz, int ordem) {
 		qtdDamas--;
 	}
 
+	destroi(&pilha);
 	return 1;
 }
 
-int verifica(int linha, int coluna, char **matriz, Pilha **pilha, int ordem) {
-
-	if (temDamaNaLinha(pilha, linha))
-		return 1;
-
-	if (temDamaNaColuna(pilha, coluna))
-		return 1;
-
-	if (temCelula(pilha, matriz[linha][coluna]))
-		return 1;
-
-	if (temDamaNasDiagonais(pilha, linha, coluna, matriz, ordem))
-		return 1;
-
-	return 0;
-}
+//int verifica(int linha, int coluna, char **matriz, Pilha **pilha, int ordem) {
+//
+//	if (temDamaNaLinha(pilha, linha))
+//		return 1;
+//
+//	if (temDamaNaColuna(pilha, coluna))
+//		return 1;
+//
+//	if (temCelula(pilha, matriz[linha][coluna]))
+//		return 1;
+//
+//	if (temDamaNasDiagonais(pilha, linha, coluna, matriz, ordem))
+//		return 1;
+//
+//	return 0;
+//}
 
 int temDamaNasDiagonais(Pilha **pilha, int linha, int coluna, char **matriz, int ordem) {
 	//verificar dama na parte de cima esquerda

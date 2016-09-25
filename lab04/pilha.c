@@ -18,6 +18,12 @@ int estaVazia(Pilha **pilha) {
 	return 0;
 }
 
+Pilha *getTopo(Pilha **pilha) {
+	if (*pilha == NULL)
+		return 0;
+	return *pilha;
+}
+
 Informacoes desempilha(Pilha **pilha) {
 	Pilha *aux = *pilha;
 
