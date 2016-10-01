@@ -75,24 +75,93 @@ int existeSolucao(char **matriz, int ordem) {
 								break;
 							}
 							else {
-								j++;
+								if (i == ordem-1 && j == ordem-1) {
+									Pilha *topo = getTopo(&pilha);
+									if (topo->info.coluna == ordem-1 && topo->info.linha == ordem-1 &&
+										i == ordem-1 && j == ordem-1) {
+										destroi(&pilha);
+										return 0;
+									}
+									Informacoes info = desempilha(&pilha);
+									qtdDamas++;
+									i = info.linha;
+									j = info.coluna;
+									continue;
+								}
 								continue;
 							}
 						}
 						else {
-							j++;
+							if (i == ordem-1 && j == ordem-1) {
+								Pilha *topo = getTopo(&pilha);
+								if (topo->info.coluna == ordem-1 && topo->info.linha == ordem-1 &&
+									i == ordem-1 && j == ordem-1) {
+									destroi(&pilha);
+									return 0;
+								}
+								Informacoes info = desempilha(&pilha);
+								qtdDamas++;
+								i = info.linha;
+								j = info.coluna;
+							}
 							continue;
 						}
 					}
 					else {
-						j++;
+						if (i == ordem-1 && j == ordem-1) {
+							Pilha *topo = getTopo(&pilha);
+							if (topo->info.coluna == ordem-1 && topo->info.linha == ordem-1 &&
+								i == ordem-1 && j == ordem-1) {
+								destroi(&pilha);
+								return 0;
+							}
+							Informacoes info = desempilha(&pilha);
+							qtdDamas++;
+							i = info.linha;
+							j = info.coluna;
+							continue;
+						}
 						continue;
 					}
 				}
 				else {
-					i++;
-					j = -1;
-					continue;
+					if (i == ordem-1 && j == ordem-1) {
+						Pilha *topo = getTopo(&pilha);
+						if (topo->info.coluna == ordem-1 && topo->info.linha == ordem-1 &&
+							i == ordem-1 && j == ordem-1) {
+							destroi(&pilha);
+							return 0;
+						}
+						Informacoes info = desempilha(&pilha);
+						qtdDamas++;
+						i = info.linha;
+						j = info.coluna;
+						continue;
+					}
+					if (i == ordem-1){
+						Pilha *topo = getTopo(&pilha);
+						if (topo->info.coluna == ordem-1 && topo->info.linha == ordem-1 &&
+							i == ordem-1 && j == ordem-1) {
+							destroi(&pilha);
+							return 0;
+						}
+						if (topo->info.coluna == ordem-1 && topo->info.linha == ordem-1 &&
+							i == ordem-1) {
+							destroi(&pilha);
+							return 0;
+						}
+						Informacoes info = desempilha(&pilha);
+						qtdDamas++;
+						i = info.linha;
+						j = info.coluna;
+						continue;
+					}
+					else {
+						i++;
+						j = -1;
+						continue;
+					}
+
 				}
 			}
 			if (empilhou == 1) {
