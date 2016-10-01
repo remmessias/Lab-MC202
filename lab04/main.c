@@ -1,28 +1,16 @@
 #include "sudokuDasRainhas.h"
 
-int main () {
+int main() {
 	int ordemTabuleiro, temSolucao;
-	char **tabuleiroP;
-	char **tabuleiroG;
+	char **tabuleiro;
 
 	lerInt(&ordemTabuleiro);
 
-	if (ordemTabuleiro <= 9) {
-		tabuleiroP = alocarMatriz(ordemTabuleiro);
-		lerMatriz(tabuleiroP, ordemTabuleiro);
-		escreveMatriz(tabuleiroP, ordemTabuleiro);
-		temSolucao = existeSolucao(tabuleiroP, ordemTabuleiro);
-		escreveResposta(temSolucao);
-		liberaMatriz(tabuleiroP, ordemTabuleiro);
-	}
-	else {
-		tabuleiroG = alocarMatriz(ordemTabuleiro);
-		lerMatriz(tabuleiroG, ordemTabuleiro);
-		escreveMatriz(tabuleiroG, ordemTabuleiro);
-		temSolucao = existeSolucao(tabuleiroG, ordemTabuleiro);
-		escreveResposta(temSolucao);
-		liberaMatriz(tabuleiroG, ordemTabuleiro);
-	}
+	tabuleiro = alocarMatriz(ordemTabuleiro);
+	lerMatriz(tabuleiro, ordemTabuleiro);
+	temSolucao = existeSolucao(tabuleiro, ordemTabuleiro);
+	escreveResposta(temSolucao);
+	liberaMatriz(tabuleiro, ordemTabuleiro);
 
 	return 0;
 }

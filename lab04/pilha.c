@@ -12,16 +12,15 @@ void empilha(Pilha **pilha, Informacoes info) {
 	*pilha = aux;
 }
 
-int estaVazia(Pilha **pilha) {
-	if ((*pilha) == NULL)
-		return 1;
-	return 0;
-}
-
-Pilha *getTopo(Pilha **pilha) {
-	if (*pilha == NULL)
-		return 0;
-	return *pilha;
+Informacoes getTopo(Pilha **pilha) {
+	if (*pilha == NULL) {
+		Informacoes info;
+		info.coluna = -1;
+		info.linha = -1;
+		info.celula = 'z';
+		return info;
+	}
+	return (*pilha)->info;
 }
 
 Informacoes desempilha(Pilha **pilha) {

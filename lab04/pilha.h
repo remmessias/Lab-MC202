@@ -1,5 +1,5 @@
-#ifndef LAB04_PILHA_H
-#define LAB04_PILHA_H
+#ifndef LAB4_PILHA_H
+#define LAB4_PILHA_H
 
 typedef struct {
 	int linha, coluna;
@@ -15,12 +15,10 @@ void criar(Pilha **pilha);
 
 void empilha(Pilha **pilha, Informacoes info);
 
-Pilha *getTopo(Pilha **pilha);
-
-int estaVazia(Pilha **pilha);
+Informacoes getTopo(Pilha **pilha);
 
 Informacoes desempilha(Pilha **pilha);
 
 void destroi(Pilha **pilha);
 
-#endif
+#endif //LAB4_PILHA_H
