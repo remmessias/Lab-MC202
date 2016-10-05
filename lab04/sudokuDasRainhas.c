@@ -64,80 +64,32 @@ int existeSolucao(char **matriz, int ordem) {
 		Informacoes topo = getTopo(&ondeTemDamas);
 		coluna = topo.coluna + 1;
 		for (i = 0; i < ordem; i++) {
-			if (!temDamaNaLinha(&ondeTemDamas, i)) {
-				if (!temCelula(&ondeTemDamas, matriz[i][coluna])) {
-					if (!temDamaNasDiagonais(&ondeTemDamas, i, coluna, matriz, ordem)) {
-						info.linha = i;
-						info.coluna = coluna;
-						info.celula = matriz[i][coluna];
-						empilha(&ondeTemDamas, info);
-						break;
-					}
-					else {
-						if (i == ordem - 1) {
-							info = desempilha(&ondeTemDamas);
-							if (info.linha == -1 && info.coluna == -1) {
-								destroi(&ondeTemDamas);
-								return 0;
-							}
-							qtdDamasFixada++;
-							i = info.linha;
-							coluna = info.coluna;
-							continue;
-						}
-						continue;
-					}
-				}
-				else {
-					if (i == ordem - 1) {
+			if (!temDamaNaLinha(&ondeTemDamas, i) && !temCelula(&ondeTemDamas, matriz[i][coluna]) &&
+				!temDamaNasDiagonais(&ondeTemDamas, i, coluna, matriz, ordem)) {
+				info.linha = i;
+				info.coluna = coluna;
+				info.celula = matriz[i][coluna];
+				empilha(&ondeTemDamas, info);
+				qtdDamasFixada--;
+				break;
+			}
+			else {
+				if (i == ordem - 1) {
+					do {
 						info = desempilha(&ondeTemDamas);
+						qtdDamasFixada++;
+						i = info.linha;
+						coluna = info.coluna;
 						if (info.linha == -1 && info.coluna == -1) {
 							destroi(&ondeTemDamas);
 							return 0;
 						}
-						qtdDamasFixada++;
-						i = info.linha;
-						coluna = info.coluna;
-						continue;
-					}
+					} while (info.linha == ordem - 1);
 					continue;
 				}
-			}
-			else {
-				if (i == ordem - 1) {
-					if (topo.coluna == ordem - 1 && topo.linha == ordem - 1 &&
-						i == ordem - 1 && coluna == ordem - 1) {
-						destroi(&ondeTemDamas);
-						return 0;
-					}
-					if (topo.coluna == ordem - 1 && topo.linha == ordem - 1 &&
-						i == ordem - 1) {
-						destroi(&ondeTemDamas);
-						return 0;
-					}
-					info = desempilha(&ondeTemDamas);
-					qtdDamasFixada++;
-					i = info.linha;
-					coluna = info.coluna;
-					if (i != ordem - 1)
-						continue;
-					else {
-						while (info.linha == ordem - 1) {
-							info = desempilha(&ondeTemDamas);
-							qtdDamasFixada++;
-							i = info.linha;
-							coluna = info.coluna;
-							if (info.linha == -1 && info.coluna == -1) {
-								destroi(&ondeTemDamas);
-								return 0;
-							}
-						}
-						continue;
-					}
-				}
+				continue;
 			}
 		}
-		qtdDamasFixada--;
 	}
 
 	destroi(&ondeTemDamas);
