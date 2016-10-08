@@ -65,7 +65,10 @@ int existeSolucao(char **matriz, int ordem) {
 		coluna = topo.coluna + 1;
 		for (i = 0; i < ordem; i++) {
 			if (!temDamaNaLinha(&ondeTemDamas, i) && !temCelula(&ondeTemDamas, matriz[i][coluna]) &&
-				!temDamaNasDiagonais(&ondeTemDamas, i, coluna, matriz, ordem)) {
+				!(verificaSegundoQuadrante(i - 1, coluna - 1, matriz, &ondeTemDamas) ||
+				  verificaPrimeiroQuadrante(i - 1, coluna + 1, matriz, &ondeTemDamas, ordem) ||
+				  verificaTerceiroQuadrante(i + 1, coluna - 1, matriz, &ondeTemDamas, ordem) ||
+				  verificaQuartoQuadrante(i + 1, coluna + 1, matriz, &ondeTemDamas, ordem))) {
 				info.linha = i;
 				info.coluna = coluna;
 				info.celula = matriz[i][coluna];
@@ -85,7 +88,6 @@ int existeSolucao(char **matriz, int ordem) {
 							return 0;
 						}
 					} while (info.linha == ordem - 1);
-					continue;
 				}
 				continue;
 			}
@@ -111,19 +113,6 @@ int temDamaNaLinha(Pilha **pilha, int linha) {
 		if (aux->info.linha == linha)
 			return 1;
 	}
-	return 0;
-}
-
-int temDamaNasDiagonais(Pilha **pilha, int linha, int coluna, char **matriz, int ordem) {
-	if (verificaSegundoQuadrante(linha - 1, coluna - 1, matriz, pilha))
-		return 1;
-	if (verificaPrimeiroQuadrante(linha - 1, coluna + 1, matriz, pilha, ordem))
-		return 1;
-	if (verificaTerceiroQuadrante(linha + 1, coluna - 1, matriz, pilha, ordem))
-		return 1;
-	if (verificaQuartoQuadrante(linha + 1, coluna + 1, matriz, pilha, ordem))
-		return 1;
-
 	return 0;
 }
 
