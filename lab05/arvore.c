@@ -1,0 +1,260 @@
+#include "arvore.h"
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+Arvore *criarArvore() {
+	Arvore *arvore = NULL;
+
+	if ((arvore = malloc(sizeof(Arvore))) == NULL) {
+		return NULL;
+	}
+
+	arvore->raiz = NULL;
+
+	return arvore;
+}
+
+NoArvore *criarNo() {
+	NoArvore *no = NULL;
+
+	if ((no = malloc(sizeof(NoArvore))) == NULL) {
+		return NULL;
+	}
+
+	no->esquerda = NULL;
+	no->direita = NULL;
+	strcpy(no->arquivo, "");
+
+	return no;
+}
+
+int alturaNo(NoArvore *no) {
+	int altura_esquerda = 0;
+	int altura_direita = 0;
+
+	if (no->esquerda) 
+		altura_esquerda = alturaNo(no->esquerda);
+	if (no->direita) 
+		altura_direita = alturaNo(no->direita);
+
+	return altura_direita > altura_esquerda ? ++altura_direita : ++altura_esquerda;
+}
+
+int fatorBalanceamento(NoArvore *no) {
+	int fb = 0;
+
+	if (no->esquerda) 
+		fb += alturaNo(no->esquerda);
+	if (no->direita) 
+		fb -= alturaNo(no->direita);
+
+	return fb;
+}
+
+NoArvore *girarEsquerdaEsquerda(NoArvore *no) {
+	NoArvore *a = no;
+	NoArvore *b = a->esquerda;
+
+	a->esquerda = b->direita;
+	b->direita = a;
+
+	return (b);
+}
+
+NoArvore *girarEsquerdaDireita(NoArvore *no) {
+	NoArvore *a = no;
+	NoArvore *b = a->esquerda;
+	NoArvore *c = b->direita;
+
+	a->esquerda = c->direita;
+	b->direita = c->esquerda;
+	c->esquerda = b;
+	c->direita = a;
+
+	return (c);
+}
+
+NoArvore *girarDireitaEsquerda(NoArvore *no) {
+	NoArvore *a = no;
+	NoArvore *b = a->direita;
+	NoArvore *c = b->esquerda;
+
+	a->direita = c->esquerda;
+	b->esquerda = c->direita;
+	c->direita = b;
+	c->esquerda = a;
+
+	return (c);
+}
+
+NoArvore *girarDireitaDireita(NoArvore *no) {
+	NoArvore *a = no;
+	NoArvore *b = a->direita;
+
+	a->direita = b->esquerda;
+	b->esquerda = a;
+
+	return (b);
+}
+
+NoArvore *balancearNo(NoArvore *no) {
+	NoArvore *novaRaiz = NULL;
+
+	if (no->esquerda)
+		no->esquerda = balancearNo(no->esquerda);
+	if (no->direita)
+		no->direita = balancearNo(no->direita);
+
+	int fb = fatorBalanceamento(no);
+
+	if (fb >= 2) {
+
+		if (fatorBalanceamento(no->esquerda) <= -1)
+			novaRaiz = girarEsquerdaDireita(no);
+		else
+			novaRaiz = girarEsquerdaEsquerda(no);
+
+	} else if (fb <= -2) {
+		if (fatorBalanceamento(no->direita) >= 1)
+			novaRaiz = girarDireitaEsquerda(no);
+		else
+			novaRaiz = girarDireitaDireita(no);
+
+	} else {
+		novaRaiz = no;
+	}
+
+	return novaRaiz;
+}
+
+void balancear(Arvore *arvore) {
+
+	NoArvore *novaRaiz = NULL;
+
+	novaRaiz = balancearNo(arvore->raiz);
+
+	if (novaRaiz != arvore->raiz) {
+		arvore->raiz = novaRaiz;
+	}
+}
+
+void inserir(Arvore *arvore, String arquivo) {
+	NoArvore *no = NULL;
+	NoArvore *proximo = NULL;
+	NoArvore *ultimo = NULL;
+
+	if (arvore->raiz == NULL) {
+		no = criarNo();
+		strcpy(no->arquivo, arquivo);
+		arvore->raiz = no;
+	} else {
+		proximo = arvore->raiz;
+
+		while (proximo != NULL) {
+			ultimo = proximo;
+
+			if (strcmp(arquivo, proximo->arquivo) < 0) {
+				proximo = proximo->esquerda;
+
+			} else if (strcmp(arquivo, proximo->arquivo) >= 0) {
+				proximo = proximo->direita;
+			}
+		}
+
+		no = criarNo();
+		strcpy(no->arquivo, arquivo);
+		if (ultimo != NULL) {
+			if (strcmp(arquivo, ultimo->arquivo) < 0)
+				ultimo->esquerda = no;
+			if (strcmp(arquivo, ultimo->arquivo) >= 0)
+				ultimo->direita = no;
+		}
+	}
+
+	balancear(arvore);
+}
+
+void remover(Arvore *arvore, String arquivo) {
+
+	NoArvore **no = &(arvore->raiz);
+
+	while (strcmp((*no)->arquivo, arquivo) != 0) {
+		if (strcmp((*no)->arquivo, arquivo) < 0)
+			no = &((*no)->direita);
+		else
+			no = &((*no)->esquerda);
+	}
+
+	if (!(*no)->direita || !(*no)->esquerda)
+		remover_caso1(no);
+	else
+		remover_caso2(*no);
+
+	balancear(arvore);
+}
+
+void remover_caso2(NoArvore *remove) {
+	NoArvore **sucessor;
+
+	sucessor = &(remove->direita);
+	while((*sucessor)->esquerda)
+		sucessor = &((*sucessor)->esquerda);
+
+	strcpy(remove->arquivo, (*sucessor)->arquivo);
+	remover_caso1(sucessor);
+}
+
+void remover_caso1(NoArvore **no) {
+	NoArvore *remove;
+	remove = *no;
+	if (remove->esquerda == NULL)
+		*no = remove->direita;
+	else
+		*no = remove->esquerda;
+	free(remove);
+}
+
+NoArvore *procurar(Arvore *arvore, String arquivo) {
+	NoArvore *atual = arvore->raiz;
+
+	while (atual && atual->arquivo != arquivo) {
+		if (strcmp(arquivo, atual->arquivo) > 0)
+			atual = atual->direita;
+		else
+			atual = atual->esquerda;
+	}
+
+	return atual;
+}
+
+void buscaProfundidade(NoArvore *no, int profundidade) {
+	int i = 0;
+
+	if (no->esquerda)
+		buscaProfundidade(no->esquerda, profundidade + 2);
+
+	for (i = 0; i < profundidade; i++)
+		putchar(' ');
+	printf("%s: %d\n", no->arquivo, fatorBalanceamento(no));
+
+	if (no->direita)
+		buscaProfundidade(no->direita, profundidade + 2);
+}
+
+int arv_vazia (NoArvore* a) {
+	return a == NULL;
+}
+
+void destroiNo (NoArvore* no) {
+	if (!arv_vazia(no)){
+		destroiNo(no->esquerda);
+		destroiNo(no->direita);
+		free(no);
+	}
+}
+
+void destroi(Arvore *arvore) {
+	destroiNo(arvore->raiz);
+	free(arvore);
+}
