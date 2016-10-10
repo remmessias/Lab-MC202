@@ -68,9 +68,9 @@ void leAcao(Arvore *arvore) {
 		else if (strcmp(comando, CRIAR) == 0) {
 			inserir(arvore, arquivo);
 		}
-//		printf("i-------------------------------------------------------\n");
-//		if (arvore->raiz != NULL)
-//			buscaProfundidade(arvore->raiz, 0);
-//		printf("F-------------------------------------------------------\n");
+		//printf("i-------------------------------------------------------\n");
+		//if (arvore->raiz != NULL)
+		//	buscaProf(arvore->raiz, 0);
+		//printf("F-------------------------------------------------------\n");
 	}
 }

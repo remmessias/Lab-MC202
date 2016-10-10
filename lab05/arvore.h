@@ -49,7 +49,7 @@ NoArvore *procurar(Arvore *arvore, String arquivo);
 
 void listarPorPrefixo(NoArvore *no, String arquivo, int *achou);
 
-//void buscaProfundidade(NoArvore *no, int profundidade);
+void buscaProf(NoArvore *no, int profundidade);
 
 void buscaProfundidade(NoArvore *no);
 
