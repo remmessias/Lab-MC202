@@ -175,23 +175,53 @@ void inserir(Arvore *arvore, String arquivo) {
 	balancear(arvore);
 }
 
-void remover(Arvore *arvore, String arquivo) {
+void remover(Arvore *arvore, String arquivo, int *achou) {
 
 	NoArvore **no = &(arvore->raiz);
 
-	while (strcmp((*no)->arquivo, arquivo) != 0) {
-		if (strcmp((*no)->arquivo, arquivo) < 0)
-			no = &((*no)->direita);
-		else
-			no = &((*no)->esquerda);
+	if ((*no) != NULL) {
+		if (comecaCom((*no)->arquivo, arquivo)) {
+			*achou = 1;
+			if (!(*no)->direita || !(*no)->esquerda)
+				remover_caso1(no);
+			else
+				remover_caso2(*no);
+		}
+		if ((*no) != NULL) {
+			if (comecaCom((*no)->arquivo, arquivo))
+				removerNo(no, arquivo, achou);
+			else {
+				if ((*no)->esquerda != NULL)
+					removerNo(&(*no)->esquerda, arquivo, achou);
+				if ((*no)->direita != NULL)
+					removerNo(&(*no)->direita, arquivo, achou);
+			}
+		}
 	}
 
-	if (!(*no)->direita || !(*no)->esquerda)
-		remover_caso1(no);
-	else
-		remover_caso2(*no);
-
 	balancear(arvore);
+}
+
+void removerNo(NoArvore **no, String arquivo, int *achou) {
+	if ((*no) != NULL) {
+		if (comecaCom((*no)->arquivo, arquivo)) {
+			*achou = 1;
+			if (!(*no)->direita || !(*no)->esquerda)
+				remover_caso1(no);
+			else
+				remover_caso2(*no);
+		}
+		if ((*no) != NULL) {
+			if (comecaCom((*no)->arquivo, arquivo))
+				removerNo(no, arquivo, achou);
+			else {
+				if ((*no)->esquerda != NULL)
+					removerNo(&(*no)->esquerda, arquivo, achou);
+				if ((*no)->direita != NULL)
+					removerNo(&(*no)->direita, arquivo, achou);
+			}
+		}
+	}
 }
 
 void remover_caso2(NoArvore *remove) {
@@ -228,19 +258,44 @@ NoArvore *procurar(Arvore *arvore, String arquivo) {
 	return atual;
 }
 
-void buscaProfundidade(NoArvore *no, int profundidade) {
-	int i = 0;
+void listarPorPrefixo(NoArvore *no, String arquivo, int *achou) {
+	if (no) {
+		if (no->esquerda)
+			listarPorPrefixo(no->esquerda, arquivo, achou);
 
+		if (comecaCom(no->arquivo, arquivo)) {
+			*achou = 1;
+			printf("%s\n", no->arquivo);
+		}
+
+		if (no->direita)
+			listarPorPrefixo(no->direita, arquivo, achou);
+	}
+}
+
+void buscaProfundidade(NoArvore *no) {
 	if (no->esquerda)
-		buscaProfundidade(no->esquerda, profundidade + 2);
+		buscaProfundidade(no->esquerda);
 
-	for (i = 0; i < profundidade; i++)
-		putchar(' ');
-	printf("%s: %d\n", no->arquivo, fatorBalanceamento(no));
+	printf("%s\n", no->arquivo);
 
 	if (no->direita)
-		buscaProfundidade(no->direita, profundidade + 2);
+		buscaProfundidade(no->direita);
 }
+
+//void buscaProfundidade(NoArvore *no, int profundidade) {
+//	int i = 0;
+//
+//	if (no->esquerda)
+//		buscaProfundidade(no->esquerda, profundidade + 2);
+//
+//	for (i = 0; i < profundidade; i++)
+//		putchar(' ');
+//	printf("%s: %d\n", no->arquivo, fatorBalanceamento(no));
+//
+//	if (no->direita)
+//		buscaProfundidade(no->direita, profundidade + 2);
+//}
 
 int arv_vazia (NoArvore* a) {
 	return a == NULL;

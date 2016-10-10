@@ -15,30 +15,62 @@ void leAcao(Arvore *arvore) {
 			char* posicao = strchr(arquivo, '*');
 
 			if (posicao != NULL) {
-				char *token = strtok(arquivo, "*");
+				char *prefixo = strtok(arquivo, "*");
 
-				if (token == NULL) {
+				if (prefixo == NULL) {
 					printf(ERRO);
 					continue;
 				}
+				int achou;
+				remover(arvore, prefixo, &achou);
 
-				remover(arvore, token);
+				if (!achou)
+					printf(ERRO);
 			}
 			else {
-				remover(arvore, arquivo);
+				int achou = 0;
+
+				remover(arvore, arquivo, &achou);
+
+				if (!achou)
+					printf(ERRO);
+
 			}
 		}
 		else if (strcmp(comando, LISTAR) == 0) {
-			printf("Lista\n");
+			if (strcmp(arquivo, "*") == 0)
+				buscaProfundidade(arvore->raiz);
+			else {
+				char* posicao = strchr(arquivo, '*');
+
+				if (posicao != NULL) {
+					char *prefixo = strtok(arquivo, "*");
+
+					if (prefixo == NULL) {
+						printf(ERRO);
+						continue;
+					}
+					int achou = 0;
+					listarPorPrefixo(arvore->raiz, prefixo, &achou);
+
+					if (!achou)
+						printf(ERRO);
+				}
+				else {
+					int achou = 0;
+					listarPorPrefixo(arvore->raiz, arquivo, &achou);
+
+					if (!achou)
+						printf(ERRO);
+				}
+			}
 		}
 		else if (strcmp(comando, CRIAR) == 0) {
 			inserir(arvore, arquivo);
 		}
+//		printf("i-------------------------------------------------------\n");
+//		if (arvore->raiz != NULL)
+//			buscaProfundidade(arvore->raiz, 0);
+//		printf("F-------------------------------------------------------\n");
 	}
-}
-
-int comecaCom(String a, String b) {
-	if(strncmp(a, b, strlen(b)) == 0)
-		return 1;
-	return 0;
 }

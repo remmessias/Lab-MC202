@@ -1,7 +1,7 @@
 #ifndef LAB05_ARVORE_H
 #define LAB05_ARVORE_H
 
-typedef char String[20];
+#include "auxiliar.h"
 
 typedef struct NoArvore {
 	struct NoArvore *esquerda;
@@ -37,7 +37,9 @@ void balancear(Arvore *arvore);
 
 void inserir(Arvore *arvore, String arquivo);
 
-void remover(Arvore *arvore, String chave);
+void remover(Arvore *arvore, String chave, int *achou);
+
+void removerNo(NoArvore **no, String arquivo, int *achou);
 
 void remover_caso1(NoArvore **no);
 
@@ -45,7 +47,11 @@ void remover_caso2(NoArvore *no);
 
 NoArvore *procurar(Arvore *arvore, String arquivo);
 
-void buscaProfundidade(NoArvore *no, int profundidade);
+void listarPorPrefixo(NoArvore *no, String arquivo, int *achou);
+
+//void buscaProfundidade(NoArvore *no, int profundidade);
+
+void buscaProfundidade(NoArvore *no);
 
 void destroi(Arvore *arvore);
 
