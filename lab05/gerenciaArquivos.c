@@ -21,7 +21,7 @@ void leAcao(Arvore *arvore) {
 					printf(ERRO);
 					continue;
 				}
-				int achou;
+				int achou = 0;
 				remover(arvore, prefixo, &achou);
 
 				if (!achou)
