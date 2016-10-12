@@ -19,7 +19,7 @@ NoArvore *criarNo();
 
 int alturaNo(NoArvore *no);
 
-int arv_vazia(NoArvore* a);
+int arvoreEstaVazia(NoArvore *a);
 
 int fatorBalanceamento(NoArvore *no);
 
@@ -35,9 +35,9 @@ NoArvore *balancearNo(NoArvore *no);
 
 void balancear(Arvore *arvore);
 
-void inserir(Arvore *arvore, String arquivo);
+void inserirNo(Arvore *arvore, String arquivo);
 
-void remover(Arvore *arvore, String chave, int *achou);
+void remover(Arvore *arvore, String arquivo, int *achou);
 
 void removerNo(NoArvore **no, String arquivo, int *achou);
 
@@ -45,16 +45,16 @@ void removerCaso1(NoArvore **no);
 
 void removerCaso2(NoArvore *no);
 
-NoArvore *procurar(Arvore *arvore, String arquivo);
+NoArvore *procurarNo(Arvore *arvore, String arquivo);
 
 void listarPorPrefixo(NoArvore *no, String arquivo, int *achou);
 
-void buscaProf(NoArvore *no, int profundidade);
+void buscaAux(NoArvore *no, int profundidade);
 
-void buscaProfundidade(NoArvore *no);
+void listarTudo(NoArvore *no);
 
-void destroi(Arvore *arvore);
+void destroiArvore(Arvore *arvore);
 
-void destroiNo (NoArvore* no);
+void destroiNo(NoArvore* no);
 
 #endif

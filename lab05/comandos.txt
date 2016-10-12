@@ -1,0 +1,27 @@
+gcc -std=c99 -pedantic -Wall *.c -o main
+./main < 1.in > 1.res
+./main < 2.in > 2.res
+./main < 3.in > 3.res
+./main < 4.in > 4.res
+./main < 5.in > 5.res
+./main < 6.in > 6.res
+./main < 7.in > 7.res
+./main < 8.in > 8.res
+./main < 9.in > 9.res
+./main < 10.in > 10.res
+./main < 11.in > 11.res
+./main < 12.in > 12.res
+./main < 17.in > 17.res
+diff 1.res 1.out
+diff 2.res 2.out
+diff 3.res 3.out
+diff 4.res 4.out
+diff 5.res 5.out
+diff 6.res 6.out
+diff 7.res 7.out
+diff 8.res 8.out
+diff 9.res 9.out
+diff 10.res 10.out
+diff 11.res 11.out
+diff 12.res 12.out
+diff 17.res 17.out

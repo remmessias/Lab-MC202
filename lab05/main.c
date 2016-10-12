@@ -9,7 +9,7 @@ int main() {
 
 	leAcao(arvore);
 
-	destroi(arvore);
+	destroiArvore(arvore);
 
 	return 0;
 }

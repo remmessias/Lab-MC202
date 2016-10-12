@@ -13,7 +13,6 @@ void leAcao(Arvore *arvore) {
 	while (scanf("%s %s", comando, arquivo) != EOF) {
 		if (strcmp(comando, REMOVER) == 0) {
 			char* posicao = strchr(arquivo, '*');
-
 			if (posicao != NULL) {
 				char *prefixo = strtok(arquivo, "*");
 
@@ -21,7 +20,9 @@ void leAcao(Arvore *arvore) {
 					printf(INEXISTENTE);
 					continue;
 				}
+
 				int achou = 0;
+
 				remover(arvore, prefixo, &achou);
 
 				if (!achou)
@@ -39,7 +40,7 @@ void leAcao(Arvore *arvore) {
 		}
 		else if (strcmp(comando, LISTAR) == 0) {
 			if (strcmp(arquivo, "*") == 0)
-				buscaProfundidade(arvore->raiz);
+				listarTudo(arvore->raiz);
 			else {
 				char* posicao = strchr(arquivo, '*');
 
@@ -50,15 +51,22 @@ void leAcao(Arvore *arvore) {
 						printf(INEXISTENTE);
 						continue;
 					}
+
 					int achou = 0;
-					listarPorPrefixo(arvore->raiz, prefixo, &achou);
+
+					NoArvore *primeiraOcorrencia = procurarNo(arvore, prefixo);
+
+					listarPorPrefixo(primeiraOcorrencia, prefixo, &achou);
 
 					if (!achou)
 						printf(INEXISTENTE);
 				}
 				else {
 					int achou = 0;
-					listarPorPrefixo(arvore->raiz, arquivo, &achou);
+
+					NoArvore *primeiraOcorrencia = procurarNo(arvore, arquivo);
+
+					listarPorPrefixo(primeiraOcorrencia, arquivo, &achou);
 
 					if (!achou)
 						printf(INEXISTENTE);
@@ -66,11 +74,7 @@ void leAcao(Arvore *arvore) {
 			}
 		}
 		else if (strcmp(comando, CRIAR) == 0) {
-			inserir(arvore, arquivo);
+			inserirNo(arvore, arquivo);
 		}
-		//printf("i-------------------------------------------------------\n");
-		//if (arvore->raiz != NULL)
-		//	buscaProf(arvore->raiz, 0);
-		//printf("F-------------------------------------------------------\n");
 	}
 }
