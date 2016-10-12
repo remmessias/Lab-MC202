@@ -3,6 +3,6 @@
 
 typedef char String[20];
 
-int comecaCom(String a, String b);
+int comecaCom(String palavra, String prefixo);
 
 #endif //LAB05_AUXILIAR_H

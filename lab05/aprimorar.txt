@@ -1,0 +1,11 @@
+list * -> percorrer lista inteira em pré ordem e printar
+
+list prefixo* -> procuro o no com arquivo(1) que começa com prefixo, listo todos a esquerda que começa com prefixo e forem menor que (1) e todos a direita que começa com prefixo e for maior que a (1) 
+
+list arquivo -> procuro nó que começa com arquivo e o listo e percorro sua subárvore direita listando todos que começam com arquivo
+
+rm* -> não removo
+
+rm prefixo* -> procuro o no com arquivo(1) que começa com prefixo, removo todos a esquerda que começa com prefixo e forem menor que (1) e todos a direita que começa com prefixo e for maior que a (1)
+
+rm arquivo -> procuro nó que começa com arquivo e o removo e percorro sua subárvore direita removendo todos que começam com arquivo

@@ -5,7 +5,7 @@
 #define REMOVER "rm"
 #define LISTAR "ls"
 #define CRIAR "touch"
-#define ERRO "nao existem arquivos com essa expressao\n"
+#define INEXISTENTE "nao existem arquivos com essa expressao\n"
 
 void leAcao(Arvore *arvore) {
 	String comando = "", arquivo = "";
@@ -18,14 +18,14 @@ void leAcao(Arvore *arvore) {
 				char *prefixo = strtok(arquivo, "*");
 
 				if (prefixo == NULL) {
-					printf(ERRO);
+					printf(INEXISTENTE);
 					continue;
 				}
 				int achou = 0;
 				remover(arvore, prefixo, &achou);
 
 				if (!achou)
-					printf(ERRO);
+					printf(INEXISTENTE);
 			}
 			else {
 				int achou = 0;
@@ -33,7 +33,7 @@ void leAcao(Arvore *arvore) {
 				remover(arvore, arquivo, &achou);
 
 				if (!achou)
-					printf(ERRO);
+					printf(INEXISTENTE);
 
 			}
 		}
@@ -47,21 +47,21 @@ void leAcao(Arvore *arvore) {
 					char *prefixo = strtok(arquivo, "*");
 
 					if (prefixo == NULL) {
-						printf(ERRO);
+						printf(INEXISTENTE);
 						continue;
 					}
 					int achou = 0;
 					listarPorPrefixo(arvore->raiz, prefixo, &achou);
 
 					if (!achou)
-						printf(ERRO);
+						printf(INEXISTENTE);
 				}
 				else {
 					int achou = 0;
 					listarPorPrefixo(arvore->raiz, arquivo, &achou);
 
 					if (!achou)
-						printf(ERRO);
+						printf(INEXISTENTE);
 				}
 			}
 		}

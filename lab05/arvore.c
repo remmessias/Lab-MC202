@@ -178,27 +178,8 @@ void inserir(Arvore *arvore, String arquivo) {
 
 void remover(Arvore *arvore, String arquivo, int *achou) {
 
-	NoArvore **no = &(arvore->raiz);
+	removerNo(&(arvore->raiz), arquivo, achou);
 
-	if ((*no) != NULL) {
-		if (comecaCom((*no)->arquivo, arquivo)) {
-			*achou = 1;
-			if (!(*no)->direita || !(*no)->esquerda)
-				remover_caso1(no);
-			else
-				remover_caso2(*no);
-		}
-		if ((*no) != NULL) {
-			if (comecaCom((*no)->arquivo, arquivo))
-				removerNo(no, arquivo, achou);
-			else {
-				if ((*no)->esquerda != NULL)
-					removerNo(&(*no)->esquerda, arquivo, achou);
-				if ((*no)->direita != NULL)
-					removerNo(&(*no)->direita, arquivo, achou);
-			}
-		}
-	}
 	if (arvore->raiz)
 		balancear(arvore);
 }
@@ -208,9 +189,9 @@ void removerNo(NoArvore **no, String arquivo, int *achou) {
 		if (comecaCom((*no)->arquivo, arquivo)) {
 			*achou = 1;
 			if (!(*no)->direita || !(*no)->esquerda)
-				remover_caso1(no);
+				removerCaso1(no);
 			else
-				remover_caso2(*no);
+				removerCaso2(*no);
 		}
 		if ((*no) != NULL) {
 			if (comecaCom((*no)->arquivo, arquivo))
@@ -225,7 +206,7 @@ void removerNo(NoArvore **no, String arquivo, int *achou) {
 	}
 }
 
-void remover_caso2(NoArvore *remove) {
+void removerCaso2(NoArvore *remove) {
 	NoArvore **sucessor;
 
 	sucessor = &(remove->direita);
@@ -233,10 +214,10 @@ void remover_caso2(NoArvore *remove) {
 		sucessor = &((*sucessor)->esquerda);
 
 	strcpy(remove->arquivo, (*sucessor)->arquivo);
-	remover_caso1(sucessor);
+	removerCaso1(sucessor);
 }
 
-void remover_caso1(NoArvore **no) {
+void removerCaso1(NoArvore **no) {
 	NoArvore *remove;
 	remove = *no;
 	if (remove->esquerda == NULL)

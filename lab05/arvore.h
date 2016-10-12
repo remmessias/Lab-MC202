@@ -41,9 +41,9 @@ void remover(Arvore *arvore, String chave, int *achou);
 
 void removerNo(NoArvore **no, String arquivo, int *achou);
 
-void remover_caso1(NoArvore **no);
+void removerCaso1(NoArvore **no);
 
-void remover_caso2(NoArvore *no);
+void removerCaso2(NoArvore *no);
 
 NoArvore *procurar(Arvore *arvore, String arquivo);
 
