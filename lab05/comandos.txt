@@ -12,6 +12,11 @@ gcc -std=c99 -pedantic -Wall *.c -o main
 ./main < 11.in > 11.res
 ./main < 12.in > 12.res
 ./main < 17.in > 17.res
+./main < 19.in > 19.res
+./main < 20.in > 20.res
+./main < 21.in > 21.res
+./main < 22.in > 22.res
+./main < 23.in > 23.res
 diff 1.res 1.out
 diff 2.res 2.out
 diff 3.res 3.out
@@ -25,3 +30,8 @@ diff 10.res 10.out
 diff 11.res 11.out
 diff 12.res 12.out
 diff 17.res 17.out
+diff 19.res 19.out
+diff 20.res 20.out
+diff 21.res 21.out
+diff 22.res 22.out
+diff 23.res 23.out

@@ -11,7 +11,6 @@ Arvore *criarArvore() {
 	}
 
 	arvore->raiz = NULL;
-
 	return arvore;
 }
 
