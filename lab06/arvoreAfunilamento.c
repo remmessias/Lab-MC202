@@ -1,223 +1,274 @@
 #include "arvoreAfunilamento.h"
-
+#include <string.h>
 #include<stdio.h>
 #include<stdlib.h>
-#include <stdbool.h>
 
-typedef struct Node {
-	struct Node *l;
-	struct Node *r;
-	struct Node *p;
-	int v;
-} Node;
+SplayTreeNode *root;
 
-Node *root;
+void rotacaoDireita(SplayTreeNode **no) {
+	SplayTreeNode *aux = *no;
 
-void rightRotate(Node *P) {
-	Node *T = P->l;
-	Node *B = T->r;
-	Node *D = P->p;
+	SplayTreeNode *T = aux->l;
+	SplayTreeNode *B = T->r;
+	SplayTreeNode *D = aux->p;
 	if (D) {
-		if (D->r == P) D->r = T;
-		else D->l = T;
+		if (D->r == aux)
+			D->r = T;
+		else
+			D->l = T;
 	}
+	
 	if (B)
-		B->p = P;
+		B->p = aux;
+	
 	T->p = D;
-	T->r = P;
+	T->r = aux;
 
-	P->p = T;
-	P->l = B;
+	aux->p = T;
+	aux->l = B;
 }
 
-void leftRotate(Node *P) {
-	Node *T = P->r;
-	Node *B = T->l;
-	Node *D = P->p;
-	if (D) {
-		if (D->r == P) D->r = T;
-		else D->l = T;
-	}
-	if (B)
-		B->p = P;
-	T->p = D;
-	T->l = P;
+void rotacaoEsquerda(SplayTreeNode **no) {
+	SplayTreeNode *aux = *no;
 
-	P->p = T;
-	P->r = B;
+	SplayTreeNode *T = aux->r;
+	SplayTreeNode *B = T->l;
+	SplayTreeNode *D = aux->p;
+	
+	if (D) {
+		if (D->r == aux)
+			D->r = T;
+		else
+			D->l = T;
+	}
+	
+	if (B)
+		B->p = aux;
+	
+	T->p = D;
+	T->l = aux;
+
+	aux->p = T;
+	aux->r = B;
 }
 
-void Splay(Node *T) {
+void afunila(SplayTreeNode **no) {
+	SplayTreeNode *aux = *no;
+
 	while (true) {
-		Node *p = T->p;
-		if (!p) break;
-		Node *pp = p->p;
-		if (!pp)//Zig
-		{
-			if (p->l == T)
-				rightRotate(p);
+		SplayTreeNode *p = aux->p;
+		
+		if (!p)
+			break;
+		
+		SplayTreeNode *pp = p->p;
+		
+		if (!pp) { //Zig
+			if (p->l == aux)
+				rotacaoDireita(&p);
 			else
-				leftRotate(p);
+				rotacaoEsquerda(&p);
+			
 			break;
 		}
+		
 		if (pp->l == p) {
-			if (p->l == T) {//ZigZig
-				rightRotate(pp);
-				rightRotate(p);
+			if (p->l == aux) { //ZigZig
+				rotacaoDireita(&pp);
+				rotacaoDireita(&p);
 			}
-			else {//ZigZag
-				leftRotate(p);
-				rightRotate(pp);
+			else { //ZigZag
+				rotacaoEsquerda(&p);
+				rotacaoDireita(&pp);
 			}
 		}
 		else {
-			if (p->l == T) {//ZigZag
-				rightRotate(p);
-				leftRotate(pp);
+			if (p->l == aux) { //ZigZag
+				rotacaoDireita(&p);
+				rotacaoEsquerda(&pp);
 			}
-			else {//ZigZig
-				leftRotate(pp);
-				leftRotate(p);
+			else { //ZigZig
+				rotacaoEsquerda(&pp);
+				rotacaoEsquerda(&p);
 			}
 		}
 	}
-	root = T;
+	
+	root = aux;
 }
 
-void Insert(int v) {
+void insereSplayTree(SplayTreeNode **no, Ingrediente ingrediente) {
+	SplayTreeNode *aux = *no;
+
 	if (!root) {
-		root = (Node *) malloc(sizeof(Node));
-		root->l = NULL;
-		root->r = NULL;
-		root->p = NULL;
-		root->v = v;
+		aux = malloc(sizeof(SplayTreeNode));
+		aux->l = NULL;
+		aux->r = NULL;
+		aux->p = NULL;
+		aux->ingrediente = ingrediente;
 		return;
 	}
-	Node *P = root;
+	
 	while (true) {
-		if (P->v == v) break; // not multiset
-		if (v < (P->v)) {
-			if (P->l) P = P->l;
+		if (strcmp(aux->ingrediente.nome, ingrediente.nome) == 0)
+			break; // not multiset
+		
+		if (strcmp(ingrediente.nome, aux->ingrediente.nome) < 0) {
+			if (aux->l)
+				aux = aux->l;
 			else {
-				P->l = (Node *) malloc(sizeof(Node));
-				P->l->p = P;
-				P->l->r = NULL;
-				P->l->l = NULL;
-				P->l->v = v;
-				P = P->l;
+				aux->l = malloc(sizeof(SplayTreeNode));
+				aux->l->p = aux;
+				aux->l->r = NULL;
+				aux->l->l = NULL;
+				aux->l->ingrediente = ingrediente;
+				aux = aux->l;
 				break;
 			}
 		}
 		else {
-			if (P->r) P = P->r;
+			if (aux->r)
+				aux = aux->r;
 			else {
-				P->r = (Node *) malloc(sizeof(Node));
-				P->r->p = P;
-				P->r->r = NULL;
-				P->r->l = NULL;
-				P->r->v = v;
-				P = P->r;
+				aux->r = malloc(sizeof(SplayTreeNode));
+				aux->r->p = aux;
+				aux->r->r = NULL;
+				aux->r->l = NULL;
+				aux->r->ingrediente = ingrediente;
+				aux = aux->r;
 				break;
 			}
 		}
 	}
-	Splay(P);
+
+	afunila(&aux);
 }
 
-void Inorder(Node *R) {
-	if (!R) return;
-	Inorder(R->l);
-	printf("v: %d ", R->v);
-	if (R->l) printf("l: %d ", R->l->v);
-	if (R->r) printf("r: %d ", R->r->v);
+void imprimeInordem(SplayTreeNode **no) {
+	SplayTreeNode *aux = *no;
+
+	if (!aux)
+		return;
+
+	imprimeInordem(&aux->l);
+	
+	printf("v: %s ", aux->ingrediente.nome);
+	
+	if (aux->l)
+		printf("l: %s ", aux->l->ingrediente.nome);
+	
+	if (aux->r)
+		printf("r: %s ", aux->r->ingrediente.nome);
+	
 	puts("");
-	Inorder(R->r);
+
+	imprimeInordem(&aux->r);
 }
 
-Node *Find(int v) {
-	if (!root) return NULL;
-	Node *P = root;
-	while (P) {
-		if (P->v == v)
+SplayTreeNode *procura(SplayTreeNode **no, Ingrediente ingrediente) {
+	SplayTreeNode *aux = *no;
+
+	if (!aux) {
+		return NULL;
+	}
+
+	while (aux) {
+		if (strcmp(aux->ingrediente.nome, ingrediente.nome) == 0)
 			break;
-		if (v < (P->v)) {
-			if (P->l)
-				P = P->l;
+		if (strcmp(ingrediente.nome, aux->ingrediente.nome) < 0) {
+			if (aux->l)
+				aux = aux->l;
 			else
 				break;
 		}
 		else {
-			if (P->r)
-				P = P->r;
+			if (aux->r)
+				aux = aux->r;
 			else
 				break;
 		}
 	}
-	Splay(P);
-	if (P->v == v)
-		return P;
-	else return NULL;
+
+	afunila(&aux);
+	
+	if (strcmp(aux->ingrediente.nome, ingrediente.nome) == 0)
+		return aux;
+	else
+		return NULL;
 }
 
-bool Erase(int v) {
-	Node *N = Find(v);
+bool apaga(SplayTreeNode **no, Ingrediente ingrediente) {
+	SplayTreeNode *aux1 = procura(no, ingrediente);
 
-	if (!N)
+	if (!aux1)
 		return false;
-	Splay(N); //check once more;
 
-	Node *P = N->l;
+	afunila(&aux1);
 
-	if (!P) {
-		root = N->r;
+	SplayTreeNode *aux2 = aux1->l;
+
+	if (!aux2) {
+		root = aux1->r;
 		root->p = NULL;
-		free(N);
+		free(aux1);
 		return true;
 	}
 
-	while (P->r)
-		P = P->r;
+	while (aux2->r)
+		aux2 = aux2->r;
 
-	if (N->r) {
-		P->r = N->r;
-		N->r->p = P;
+	if (aux1->r) {
+		aux2->r = aux1->r;
+		aux1->r->p = aux2;
 	}
 
-	root = N->l;
+	root = aux1->l;
 	root->p = NULL;
 
-	free(N);
+	free(aux1);
 
 	return true;
 }
 
-int main() {
-	for (int i = 0; i < 20; i++) {
-		int t;
+void destroiSplayTree (SplayTreeNode **no) {
+	SplayTreeNode *aux = *no;
 
-		scanf("%d", &t);
+	if (aux->l != NULL)
+		destroiSplayTree(&aux->l);
 
-		if (t != 0 && t != -1)
-			Insert(t);
-		else if (t == 0) {
-			scanf("%d", &t);
+	if (aux->r != NULL)
+		destroiSplayTree(&aux->r);
 
-			if (!Find(t))
-				printf("Couldn't Find %d!\n", t);
-			else
-				printf("Found %d!\n", t);
-		}
-		else {
-
-			scanf("%d", &t);
-			if (Erase(t))
-				printf("Deleted %d!\n", t);
-			else
-				printf("Couldn't Find %d!\n", t);
-		}
-		if (root)
-			printf("root: %d\n", root->v);
-
-		Inorder(root);
-	}
+	free(aux);
 }
+
+//int main() {
+//	for (int i = 0; i < 20; i++) {
+//		int t;
+//
+//		scanf("%d", &t);
+//
+//		if (t != 0 && t != -1)
+//			insere(t);
+//		else if (t == 0) {
+//			scanf("%d", &t);
+//
+//			if (!procura(t))
+//				printf("Couldn't procura %d!\n", t);
+//			else
+//				printf("Found %d!\n", t);
+//		}
+//		else {
+//
+//			scanf("%d", &t);
+//			if (apaga(t))
+//				printf("Deleted %d!\n", t);
+//			else
+//				printf("Couldn't procura %d!\n", t);
+//		}
+//		if (root)
+//			printf("root: %d\n", root->v);
+//
+//		imprimeInordem(root);
+//	}
+//}

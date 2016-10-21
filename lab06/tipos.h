@@ -10,9 +10,13 @@ typedef struct {
 	int tempo;
 } Ingrediente;
 
+typedef struct ListaNo{
+	Ingrediente ingrediente;
+	struct ListaNo *proximo;
+} ListaNo;
+
 typedef struct {
-	Ingrediente *ingredientes;
-	int qtdIngrediente;
+	ListaNo *ingredientes;
 	bool assando;
 } Pizza;
 
@@ -23,7 +27,12 @@ typedef struct {
 
 typedef struct Cliente {
 	Informacoes info;
-	struct Cliente *prox;
+	struct Cliente *proximo;
 } Cliente;
+
+typedef struct SplayTreeNode {
+	struct SplayTreeNode *l, *r, *p;
+	Ingrediente ingrediente;
+} SplayTreeNode;
 
 #endif //LAB06_TIPOS_H

@@ -1,38 +1,26 @@
 #include "gerenciaPizzaria.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include "auxiliar.h"
-#include "fila.h"
+#include "listaIngredientes.h"
+#include "listaClientes.h"
 
-void lePedidos(Cliente **fila) {
-	String ingredientes = "";
+void lePedidos(Cliente **listaClientes) {
+	String ingrediente = "";
 	int tempo, senha = 1;
 
-	while(scanf("%d %[^\n]s", &tempo, ingredientes) != EOF) {
+	while (scanf("%d", &tempo) == 1) {
 		Informacoes info;
-		char** tokens;
-		int i;
-
-		info.senha = senha;
-		info.quandoChegou = tempo*10;
-		info.pizza.assando = false;
-
-		tokens = str_split(ingredientes, ' ');
-
-		for (i = 0; *(tokens + i); i++);
-
-		int qtdIngredientes = i;
-		info.pizza.qtdIngrediente = qtdIngredientes;
-		info.pizza.ingredientes = malloc(sizeof(Ingrediente)*qtdIngredientes);
-
-		for (i = 0; *(tokens + i); i++) {
-			strcpy(info.pizza.ingredientes[i].nome, *(tokens + i));
-			info.pizza.ingredientes[i].tempo = 20;
-			free(*(tokens + i));
+		criaListaIngredientes(&info.pizza.ingredientes);
+		while (scanf("%*[ ]%[^ \r\n]", ingrediente) == 1) {
+			Ingrediente ing;
+			strcpy(ing.nome, ingrediente);
+			ing.tempo = 0;
+			info.senha = senha;
+			info.quandoChegou = tempo * 10;
+ 			info.pizza.assando = false;
+			insereListaIngredientes(&info.pizza.ingredientes, ing);
 		}
-		free(tokens);
-		insere(fila, info);
+		insereListaClientes(listaClientes, info);
 		senha++;
 	}
 }

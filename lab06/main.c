@@ -1,13 +1,16 @@
-#include "fila.h"
 #include "gerenciaPizzaria.h"
+#include "listaClientes.h"
 
 int main () {
-	Cliente *fila;
+	Cliente *listaClientes;
 
-	criar(&fila);
-	lePedidos(&fila);
-	exibe(&fila);
-	destroi(&fila);
+	criaListaClientes(&listaClientes);
+	lePedidos(&listaClientes);
+
+	escreveListaClientes(&listaClientes);
+	//TODO: LIBERAR MEMÓRIA DAS DUAS LISTAS
+	//printar lista
+	//destruir lista
 
 	return 0;
 }
