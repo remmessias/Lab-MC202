@@ -3,6 +3,6 @@
 
 #include "tipos.h"
 
-void lePedidos(Cliente **fila);
+void abrePizzaria(Cliente **listaClientes, Cliente **listaEspera, SplayTreeNode *arvoreIngredientes);
 
 #endif //LAB06_GERENCIAPIZZARIA_H

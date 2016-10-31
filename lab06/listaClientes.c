@@ -1,6 +1,5 @@
 #include "listaClientes.h"
 #include "listaIngredientes.h"
-#include "tipos.h"
 #include <stdlib.h>
 #include <stdio.h>
 

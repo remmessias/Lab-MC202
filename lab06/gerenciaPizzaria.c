@@ -4,8 +4,10 @@
 #include "listaIngredientes.h"
 #include "listaClientes.h"
 
-void lePedidos(Cliente **listaClientes) {
+void abrePizzaria(Cliente **listaClientes, Cliente **listaEspera, SplayTreeNode *arvoreIngredientes) {
 	String ingrediente = "";
+	bool fornoEstaVazio = false;
+	int tempoDecorrido = 20;
 	int tempo, senha = 1;
 
 	while (scanf("%d", &tempo) == 1) {
@@ -21,6 +23,22 @@ void lePedidos(Cliente **listaClientes) {
 			insereListaIngredientes(&info.pizza.ingredientes, ing);
 		}
 		insereListaClientes(listaClientes, info);
+
+		if (!fornoEstaVazio) {
+			fornoEstaVazio = true;
+
+			if (estaVazia(listaEspera)) {
+
+			}
+			else {
+				if (estaVazia(listaClientes)) {
+
+				}
+			}
+
+
+		}
+
 		senha++;
 	}
 }
