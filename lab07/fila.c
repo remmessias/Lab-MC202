@@ -22,6 +22,15 @@ void incrementaFrequencia(NoFila **no, int elemento) {
 	}
 }
 
+void decrementaFrequencia(NoFila **no, int elemento) {
+	NoFila *aux;
+
+	for (aux = *no; aux != NULL; aux = aux->proximo) {
+		if (aux->info.valor == elemento)
+			aux->info.frequencia--;
+	}
+}
+
 int temElemento(NoFila **no, int elemento) {
 	NoFila *aux;
 
@@ -86,4 +95,16 @@ Informacoes removeFila(NoFila **no) {
 	retorno.frequencia = -1;
 
 	return retorno;
+}
+
+void destroiFila(NoFila **no) {
+	NoFila *aux = *no;
+	NoFila *temp;
+
+	while (aux != NULL) {
+		temp = aux;
+		aux = aux->proximo;
+		free(temp);
+	}
+
 }

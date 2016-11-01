@@ -13,12 +13,23 @@ typedef struct NoFila {
 } NoFila;
 
 void criaFila(NoFila **no);
+
 int filaVazia(NoFila **no);
+
 void insereFila(NoFila** no, Informacoes info);
+
 Informacoes removeFila(NoFila **no);
+
 void escreveFila(NoFila **no);
+
 int temElemento(NoFila **no, int elemento);
+
 void incrementaFrequencia(NoFila **no, int elemento);
+
+void decrementaFrequencia(NoFila **no, int elemento);
+
 int getFrequencia(NoFila **no, int elemento);
+
+void destroiFila(NoFila **no);
 
 #endif //LAB07_FILA_H
