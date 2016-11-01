@@ -10,9 +10,7 @@ int main () {
 
 	leEspecificacoes(&tamCache, &qtdElementos, &qtdSolicitacao);
 
-	filaPrioridade.capacidade = tamCache;
-	filaPrioridade.estaCheio = 0;
-	filaPrioridade.quantidade = 0;
+	filaPrioridade = inicializaFila(tamCache);
 
 	criaFila(&fila);
 
@@ -44,7 +42,6 @@ int main () {
 
 				if (!filaPrioridade.estaCheio) {
 					removeMin(filaPrioridade);
-					filaPrioridade.quantidade--;
 					decrementaFrequencia(&fila, elemen.valor);
 
 					// reduz a frequencia no cache
