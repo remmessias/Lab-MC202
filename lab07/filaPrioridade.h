@@ -5,19 +5,21 @@
 
 typedef struct {
 	int capacidade, quantidade, estaCheio, estaVazio;
-	Informacoes *cache;
+	int *cache;
 } FilaPrioridade;
 
 FilaPrioridade inicializaFila (int tamCache);
 
-void removeMin (FilaPrioridade *fila);
+void insere (int info, FilaPrioridade *fila);
 
-void insere (Informacoes info, FilaPrioridade *fila);
-
-int temCache (Informacoes info, FilaPrioridade *fila);
+int temCache (int info, FilaPrioridade *fila);
 
 int menorFilho(int i, FilaPrioridade *fila);
 
 void troca(FilaPrioridade *fila, int pai, int menor);
+
+void removeUltimoASerAcessado(NoFila **fila, FilaPrioridade *filaPrioridade);
+
+void remover(FilaPrioridade *filaPrioridade, int pos);
 
 #endif //LAB07_FILAPRIORIDADE_H

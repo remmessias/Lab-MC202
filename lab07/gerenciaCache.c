@@ -12,21 +12,17 @@ void escreveAcessos(int qtdAcessos) {
 int calculaAcessos(NoFila **fila, FilaPrioridade *filaPrioridade) {
 	int acessos = 0;
 	while (*fila != NULL) {
-		Informacoes elemen = removeFila(fila);
+		int elemen = removeFila(fila);
 
-		if (elemen.frequencia != -1 && elemen.valor != -1) {
+		if (elemen != -1) {
 			if (!temCache(elemen, filaPrioridade)) {
-
 				if (filaPrioridade->estaCheio) {
-					removeMin(filaPrioridade);
-					decrementaFrequencia(fila, elemen.valor);
-					elemen.frequencia--;
+					//procurar o ultimo a ser chamado ou o que não vai mais ser chamado e remove-lo
+					removeUltimoASerAcessado(fila, filaPrioridade);
 					insere(elemen, filaPrioridade);
 					acessos++;
 				}
 				else {
-					decrementaFrequencia(fila, elemen.valor);
-					elemen.frequencia--;
 					insere(elemen, filaPrioridade);
 					acessos++;
 				}
@@ -41,19 +37,6 @@ void leAcessos(NoFila **fila, int qtdSolicitacao) {
 	int i, elemento;
 	for (i = 0; i < qtdSolicitacao; i++) {
 		scanf(" %d", &elemento);
-		if (temElemento(fila, elemento)) {
-			incrementaFrequencia(fila, elemento);
-			Informacoes info;
-			info.valor = elemento;
-			info.frequencia = getFrequencia(fila, elemento);
-			insereFila(fila, info);
-		}
-		else {
-			Informacoes info;
-			info.valor = elemento;
-			info.frequencia = 1;
-			insereFila(fila, info);
-		}
-
+		insereFila(fila, elemento);
 	}
 }
