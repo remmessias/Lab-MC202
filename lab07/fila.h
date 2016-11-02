@@ -20,8 +20,6 @@ void insereFila(NoFila** no, Informacoes info);
 
 Informacoes removeFila(NoFila **no);
 
-void escreveFila(NoFila **no);
-
 int temElemento(NoFila **no, int elemento);
 
 void incrementaFrequencia(NoFila **no, int elemento);

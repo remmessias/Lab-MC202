@@ -3,19 +3,21 @@
 
 #include "fila.h"
 
-#define MAX_CACHE 10000
-
 typedef struct {
-	int capacidade, quantidade, estaCheio;
+	int capacidade, quantidade, estaCheio, estaVazio;
 	Informacoes *cache;
 } FilaPrioridade;
 
 FilaPrioridade inicializaFila (int tamCache);
 
-void removeMin (FilaPrioridade fila);
+void removeMin (FilaPrioridade *fila);
 
-void insere (Informacoes info, FilaPrioridade fila);
+void insere (Informacoes info, FilaPrioridade *fila);
 
-int temCache (Informacoes info, FilaPrioridade fila);
+int temCache (Informacoes info, FilaPrioridade *fila);
+
+int menorFilho(int i, FilaPrioridade *fila);
+
+void troca(FilaPrioridade *fila, int pai, int menor);
 
 #endif //LAB07_FILAPRIORIDADE_H

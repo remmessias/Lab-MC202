@@ -42,14 +42,6 @@ int temElemento(NoFila **no, int elemento) {
 	return 0;
 }
 
-void escreveFila(NoFila **no) {
-	NoFila *aux = *no;
-
-	for (; aux != NULL; aux = aux->proximo) {
-		printf("v: %d f: %d\n", aux->info.valor, aux->info.frequencia);
-	}
-}
-
 void criaFila(NoFila **no) {
 	*no = NULL;
 }
@@ -90,9 +82,10 @@ Informacoes removeFila(NoFila **no) {
 		*no = (*no)->proximo;
 		free(auxiliar);
 	}
-
-	retorno.valor = -1;
-	retorno.frequencia = -1;
+	else {
+		retorno.valor = -1;
+		retorno.frequencia = -1;
+	}
 
 	return retorno;
 }
