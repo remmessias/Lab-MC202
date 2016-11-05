@@ -2,43 +2,15 @@
 #include "fila.h"
 #include <stdio.h>
 
-int getFrequencia(NoFila **no, int elemento) {
-	NoFila * aux;
-
-	for (aux = *no; aux != NULL; aux = aux->proximo) {
-		if (aux->info.valor == elemento)
-			return aux->info.frequencia;
-	}
-
-	return 0;
-}
-
-void incrementaFrequencia(NoFila **no, int elemento) {
-	NoFila *aux;
-
-	for (aux = *no; aux != NULL; aux = aux->proximo) {
-		if (aux->info.valor == elemento)
-			aux->info.frequencia++;
-	}
-}
-
 int temElemento(NoFila **no, int elemento) {
 	NoFila *aux;
 
 	for (aux = *no; aux != NULL; aux = aux->proximo) {
-		if (aux->info.valor == elemento)
+		if (aux->valor == elemento)
 			return 1;
 	}
 
 	return 0;
-}
-
-void escreveFila(NoFila **no) {
-	NoFila *aux = *no;
-
-	for (; aux != NULL; aux = aux->proximo) {
-		printf("v: %d f: %d\n", aux->info.valor, aux->info.frequencia);
-	}
 }
 
 void criaFila(NoFila **no) {
@@ -50,12 +22,12 @@ int filaVazia(NoFila **no) {
 }
 
 
-void insereFila(NoFila **no, Informacoes info) {
+void insereFila(NoFila **no, int info) {
 	NoFila *novoElemento;
 	NoFila *auxiliar;
 
 	novoElemento = malloc(sizeof(NoFila));
-	novoElemento->info = info;
+	novoElemento->valor = info;
 	novoElemento->proximo = NULL;
 
 	if (filaVazia(no)) {
@@ -71,19 +43,42 @@ void insereFila(NoFila **no, Informacoes info) {
 	}
 }
 
-Informacoes removeFila(NoFila **no) {
+int removeFila(NoFila **no) {
 	NoFila *auxiliar;
-	Informacoes retorno;
+	int retorno;
 
 	if (!filaVazia(no)) {
-		retorno = (*no)->info;
+		retorno = (*no)->valor;
 		auxiliar =  *no;
 		*no = (*no)->proximo;
 		free(auxiliar);
 	}
-
-	retorno.valor = -1;
-	retorno.frequencia = -1;
+	else {
+		retorno = -1;
+	}
 
 	return retorno;
+}
+
+int distancia(NoFila **fila, int valor) {
+	NoFila *aux;
+	int qtdNos = 0;
+
+	for (aux = *fila; aux->valor != valor; aux = aux->proximo) {
+		qtdNos++;
+	}
+
+	return qtdNos;
+}
+
+void destroiFila(NoFila **no) {
+	NoFila *aux = *no;
+	NoFila *temp;
+
+	while (aux != NULL) {
+		temp = aux;
+		aux = aux->proximo;
+		free(temp);
+	}
+
 }

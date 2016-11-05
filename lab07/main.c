@@ -1,45 +1,40 @@
-#include <stdio.h>
+/*
+ * Nome: Rebecca Moreira Messias RA: 186416 Turma: F
+ *
+ * Olá,
+ *
+ *	Tentei fazer o melhor que pude, mas não passou em 3 testes devido ao tempo.
+ *	Acho que já sei como concerta, mas acabei não tendo tempo para consertar até
+ *	o horário final de submissão.
+ *	Comentei (Documentei) o que achei necessário, pois tentei utilizar nomes que
+ *	fossem claros e facilita-se o entendimento.
+ *	Aceito crítica construtivas e cometários sbre o que posso melhorar.
+ *
+ *	Agradecida.
+ */
+
 #include "gerenciaCache.h"
-#include "fila.h"
 
 int main () {
-	int tamCache, qtdElementos, qtdSolicitacao, elemento, i;
+	int tamCache, qtdElementos, qtdSolicitacao, acessos = 0;
 	NoFila *fila;
+	FilaPrioridade filaPrioridade;
 
 	leEspecificacoes(&tamCache, &qtdElementos, &qtdSolicitacao);
 
+	filaPrioridade = inicializaFila(tamCache);
+
 	criaFila(&fila);
 
-	for (i = 0; i < qtdSolicitacao; i++) {
-		scanf(" %d", &elemento);
-		if (temElemento(&fila, elemento)) {
-			incrementaFrequencia(&fila, elemento);
-			Informacoes info;
-			info.valor = elemento;
-			info.frequencia = getFrequencia(&fila, elemento);
-			insereFila(&fila, info);
-		}
-		else {
-			Informacoes info;
-			info.valor = elemento;
-			info.frequencia = 1;
-			insereFila(&fila, info);
-		}
+	leAcessos(&fila, qtdSolicitacao);
 
-	}
+	acessos = calculaAcessos(&fila, &filaPrioridade);
 
-	escreveFila(&fila);
+	escreveAcessos(acessos);
 
-	/*
-	 * Crio uma fila com as solicitacoes
-	 *
-	 * Cria uma fila de prioridade cache com qtdElementos
-	 *
-	 * Leio cada solicitacao e coloco na fila com a sua frequencia
-	 *
-	 * crio uma fila de prioridades com base na frequencia
-	 *
-	 */
+	destroiFila(&fila);
 
 	return 0;
 }
+
+
