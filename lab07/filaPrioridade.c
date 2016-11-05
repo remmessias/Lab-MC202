@@ -91,6 +91,7 @@ void removeUltimoASerAcessado(NoFila **fila, FilaPrioridade *filaPrioridade) {
 			removeu = 1;
 			remover(filaPrioridade, i);
 			break;
+
 		}
 	}
 
