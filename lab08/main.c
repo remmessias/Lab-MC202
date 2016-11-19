@@ -1,79 +1,41 @@
+/*
+ * Nome: Rebecca Moreira Messias RA: 186416 Turma: F
+ */
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "hashTable.h"
 #include "memoryGame.h"
 
-void escreveResposta(int **pontuacao, int rodadas, int participantes);
-
 int main () {
-	int participantes, rodadas, qtdPalavrasFrase, i, j;
+	int participantes, rodadas;
 	TabelaEspalhamento tabela;
-	Informacao info;
 	String *palavras;
 	int **pontuacao;
 
-	scanf(" %d", &tabela.quantidade);
+	leInteiro(&tabela.quantidade);
 
 	tabela.tabela = malloc(sizeof(Hash) * tabela.quantidade);
 
 	palavras = malloc(sizeof(String) * tabela.quantidade);
 
-	for (i = 0; i < tabela.quantidade; i++) {
-		scanf(" %s", info.palavra);
-		info.chave = info.posicao = i;
-		inserirHash(info, &tabela);
-		strcpy(palavras[i], info.palavra);
-	}
+	leTexto(&tabela, palavras);
 
-	scanf(" %d %d", &rodadas, &participantes);
+	leInteiro(&rodadas);
+	leInteiro(&participantes);
 
-	pontuacao = malloc(sizeof(int*)*rodadas);
-
-	for (i = 0; i < rodadas; i++) {
-		pontuacao[i] = malloc(sizeof(int) * participantes);
-	}
-
-	for (i = 0; i < rodadas; i++) {
-		for (j = 0; j < participantes; j++) {
-			pontuacao[i][j] = 0;
-		}
-	}
+	pontuacao = alocarMatriz(rodadas, participantes);
 
 	Participantes palavrasParticipante[participantes];
 
-	for (i = 0; i < rodadas; i++) {
-		scanf(" %d", &qtdPalavrasFrase);
-
-		String frase[qtdPalavrasFrase];
-
-		for (j = 0; j < qtdPalavrasFrase; j++) {
-			scanf(" %s", frase[j]);
-		}
-
-		for (j = 0; j < participantes; j++) {
-			scanf(" %s", palavrasParticipante[j].palavra);
-		}
-
-		calculaPontuacao(palavrasParticipante, frase, participantes, qtdPalavrasFrase, pontuacao, i, &tabela, palavras);
-	}
+	iniciaJogo(rodadas, participantes, &tabela, pontuacao, palavrasParticipante, palavras);
 
 	calculaPorFase(pontuacao, rodadas, participantes);
 	escreveResposta(pontuacao, rodadas, participantes);
 
 	destroiListas(&tabela);
 	destroiTabela(&tabela);
+	liberaMatriz(pontuacao, rodadas);
+	free(palavras);
 
 	return 0;
-}
-
-void escreveResposta(int **pontuacao, int rodadas, int participantes) {
-	int i, j;
-	for (i = 0; i < rodadas; i++) {
-		printf("Rodada %d:", i+1);
-		for (j = 0; j < participantes; j++) {
-			printf(" %4d", pontuacao[i][j]);
-		}
-		printf("\n");
-	}
 }
